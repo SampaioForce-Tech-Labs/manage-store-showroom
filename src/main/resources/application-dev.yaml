@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: manage-store-showroom
+  output:
+    ansi:
+      enabled: always
+
+server:
+  servlet:
+    context-path: /manage_store/v1
+  port: 8080
