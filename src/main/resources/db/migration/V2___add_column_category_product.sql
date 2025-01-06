@@ -1,0 +1,1 @@
+ALTER TABLE tb_product ADD COLUMN category VARCHAR(50) NOT NULL

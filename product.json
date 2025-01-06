@@ -1,0 +1,10 @@
+{
+  "nameProduct": "Smartphone X1000",
+  "code": "1000001",
+  "price": 1499.99,
+  "amount": 50,
+  "size": "15.5cm",
+  "stock": 30,
+  "description": "Smartphone com tela de 6.5 polegadas, câmera de 64MP, 128GB de armazenamento.",
+  "category": "Electronics"
+}
