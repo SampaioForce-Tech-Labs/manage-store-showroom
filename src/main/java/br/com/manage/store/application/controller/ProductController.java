@@ -13,9 +13,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -27,42 +25,37 @@ public class ProductController implements IProductController {
     private final SpecificationFactory<ProductEntity> specificationFactory;
 
     @Override
-    public ResponseEntity<URI> create(ProductRequest request) {
+    public ResponseEntity<ProductResponse> create(ProductRequest request) {
 
-        var product = productService.createProduct(modelMapper.map(request, ProductEntity.class));
-
-        URI uri = ServletUriComponentsBuilder
-                .fromCurrentRequestUri()
-                .path("/{id}")
-                .buildAndExpand(product.getId()).toUri();
-        return ResponseEntity.created(uri).build();
+        var response = productService.create(request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @Override
     public ResponseEntity<ProductResponse> findById(Long id) {
 
-        var response = modelMapper.map(productService.findByIdProduct(id), ProductResponse.class);
+        var response = modelMapper.map(productService.findById(id), ProductResponse.class);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @Override
     public ResponseEntity<Void> delete(Long id) {
 
-        productService.deleteProduct(id);
+        productService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @Override
     public ResponseEntity<ProductResponse> update(Long id, ProductRequest request) {
 
-        var response = productService.updateProduct(id, modelMapper.map(request, ProductEntity.class));
-        return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(request, ProductResponse.class));
+        var response = productService.update(id, request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @Override
     public ResponseEntity<List<ProductResponse>> findAll(ProductFilterTO filterTO, int size, int page) {
 
         Specification<ProductEntity> specificaiton = specificationFactory.create(filterTO);
-        return ResponseEntity.status(HttpStatus.OK).body(productService.findAllProduct(specificaiton, size, page));
+        return ResponseEntity.status(HttpStatus.OK).body(productService.findAll(specificaiton, size, page));
     }
 }

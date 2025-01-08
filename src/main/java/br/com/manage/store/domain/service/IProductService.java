@@ -1,22 +1,21 @@
 package br.com.manage.store.domain.service;
 
+import br.com.manage.store.application.api.request.ProductRequest;
 import br.com.manage.store.application.api.response.ProductResponse;
 import br.com.manage.store.domain.entity.ProductEntity;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 
 public interface IProductService {
 
-    ProductEntity createProduct(ProductEntity entity);
+    ProductResponse create(ProductRequest request);
 
-    ProductEntity findByIdProduct(Long id);
+    ProductResponse findById(Long id);
 
-    void deleteProduct(Long id);
+    void delete(Long id);
 
-    ProductEntity updateProduct(Long id, ProductEntity entity);
+    ProductResponse update(Long id, ProductRequest request);
 
-    List<ProductResponse> findAllProduct(Specification<ProductEntity> specification, int size, int page);
+    List<ProductResponse> findAll(Specification<ProductEntity> specification, int size, int page);
 }

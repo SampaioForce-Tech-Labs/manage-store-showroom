@@ -14,7 +14,7 @@ import java.util.List;
 public interface IProductController {
 
     @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<URI> create(@RequestBody ProductRequest request);
+    ResponseEntity<ProductResponse> create(@RequestBody ProductRequest request);
 
     @GetMapping(value = "/find/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<ProductResponse> findById(@PathVariable Long id);
