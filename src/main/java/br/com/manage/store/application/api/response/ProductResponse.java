@@ -14,8 +14,7 @@ import java.time.LocalDateTime;
 public class ProductResponse {
 
     private Long id;
-    private String code;
-    private String nameProduct;
+    private String name;
     private BigDecimal price;
     private Integer amount;
     private String size;

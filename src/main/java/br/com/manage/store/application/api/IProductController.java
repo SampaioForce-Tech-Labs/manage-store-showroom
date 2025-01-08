@@ -1,25 +1,35 @@
 package br.com.manage.store.application.api;
 
+import br.com.manage.store.application.api.filter.ProductFilterTO;
 import br.com.manage.store.application.api.request.ProductRequest;
 import br.com.manage.store.application.api.response.ProductResponse;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
-@RequestMapping(value = "/product")
+@RequestMapping(value = "/products")
 public interface IProductController {
 
-    @PostMapping(value = "/create", produces = "application/json")
-    ResponseEntity<URI> createProduct(@RequestBody ProductRequest request);
+    @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<URI> create(@RequestBody ProductRequest request);
 
-    @GetMapping(value = "/get/{id}", produces = "application/json")
-    ResponseEntity<ProductResponse> findByIdProduct(@PathVariable Long id);
+    @GetMapping(value = "/find/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<ProductResponse> findById(@PathVariable Long id);
 
-    @DeleteMapping(value = "/delete/{id}", produces = "application/json")
-    ResponseEntity<Void> deleteProduct(@PathVariable Long id);
+    @DeleteMapping(value = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<Void> delete(@PathVariable Long id);
 
-    @PutMapping(value = "/update/{id}", produces = "application/json")
-    ResponseEntity<ProductResponse> updateProduct(@PathVariable Long id, @RequestBody ProductRequest request);
+    @PutMapping(value = "/update/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<ProductResponse> update(@PathVariable Long id, @RequestBody ProductRequest request);
+
+    @GetMapping(value = "/find-all", produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<List<ProductResponse>> findAll(
+            ProductFilterTO filterTO,
+            @RequestParam(name = "size", defaultValue = "5") int size,
+            @RequestParam(name = "page", defaultValue = "0") int page
+    );
 
 }
