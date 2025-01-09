@@ -1,1 +1,0 @@
-package br.com.manage.store.domain.entity;

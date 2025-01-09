@@ -11,11 +11,11 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "tb_product")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "tb_product")
 public class ProductEntity {
 
     @Id
@@ -48,3 +48,5 @@ public class ProductEntity {
     private LocalDateTime createAt;
 
 }
+
+

@@ -9,8 +9,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProductRepository extends
-        JpaRepository<ProductEntity, Long> {
+public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
     Page<ProductEntity> findAll(Specification<ProductEntity> specification, Pageable pageable);
 }
