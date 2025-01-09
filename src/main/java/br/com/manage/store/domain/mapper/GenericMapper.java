@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static br.com.manage.store.domain.util.VerifyNotNull.notNull;
+import static br.com.manage.store.infrastructure.util.VerifyNotNull.notNull;
 
 @Component
 @AllArgsConstructor

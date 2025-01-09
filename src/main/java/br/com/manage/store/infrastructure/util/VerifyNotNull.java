@@ -1,4 +1,4 @@
-package br.com.manage.store.domain.util;
+package br.com.manage.store.infrastructure.util;
 
 import br.com.manage.store.infrastructure.handler.exceptions.InvalidArgumentException;
 import lombok.AccessLevel;

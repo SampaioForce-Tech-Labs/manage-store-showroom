@@ -19,8 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static br.com.manage.store.domain.util.ComparePrice.checkPrice;
-import static br.com.manage.store.domain.util.VerifyNotNull.notNull;
+import static br.com.manage.store.infrastructure.util.ComparePrice.checkPrice;
+import static br.com.manage.store.infrastructure.util.VerifyNotNull.notNull;
 
 @Service
 @AllArgsConstructor
