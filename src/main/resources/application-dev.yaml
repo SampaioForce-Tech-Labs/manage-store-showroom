@@ -4,6 +4,8 @@ server:
   port: 8081
 
 spring:
+  main:
+    banner-mode: console
   application:
     name: manage-store-showroom
   output:
