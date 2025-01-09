@@ -21,31 +21,28 @@ public class ProductEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 60)
-    private String code;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "name_product", nullable = false, length = 60)
-    private String nameProduct;
-
-    @Column(nullable = false)
+    @Column(name = "price")
     private BigDecimal price;
 
-    @Column(nullable = false)
+    @Column(name = "amount")
     private int amount;
 
-    @Column(name = "size_item", length = 60)
+    @Column(name = "size_item")
     private String size;
 
-    @Column(nullable = false)
+    @Column(name = "stock")
     private int stock;
 
-    @Column(nullable = false)
+    @Column(name = "description")
     private String description;
 
-    @Column(nullable = true, length = 50)
+    @Column(name = "category")
     private String category;
 
-    @Column(nullable = true)
+    @Column(name = "create_at")
     private LocalDateTime createAt;
 
 }

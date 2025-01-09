@@ -1,1 +1,0 @@
-ALTER TABLE tb_product ADD COLUMN create_at DATETIME;
