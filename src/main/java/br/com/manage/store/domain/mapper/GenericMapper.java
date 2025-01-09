@@ -15,14 +15,14 @@ public class GenericMapper {
 
     private final ModelMapper modelMapper;
 
-    public <O> O map(Object source, Class<O> sourceClass){
+    public <T, O> T map(O source, Class<T> sourceClass){
 
         notNull(List.of(source, sourceClass));
 
         return modelMapper.map(source, sourceClass);
     }
 
-    public <O> List<O> mapAll(List<?> sources, Class<O> sourceClass){
+    public <T, O> List<T> mapAll(List<O> sources, Class<T> sourceClass){
 
         notNull(List.of(sources, sourceClass));
 
