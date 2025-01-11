@@ -1,0 +1,16 @@
+{
+  "id": 1,
+  "name": "Maria Oliveira",
+  "cpf": "98765432100",
+  "email": "maria.oliveira@example.com",
+  "phone": "5521987654321",
+  "dateBirth": "1985-08-25",
+  "zipCode": "22041010",
+  "address": "Avenida Atlântica",
+  "numberAddress": "500",
+  "complement": "Cobertura",
+  "neighborhood": "Copacabana",
+  "city": "Rio de Janeiro",
+  "state": "RJ",
+  "createAt": "2025-01-10T12:34:56"
+}
