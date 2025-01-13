@@ -1,11 +1,11 @@
 package br.com.manage.store.application.controller;
 
-import br.com.manage.store.application.api.IClientController;
-import br.com.manage.store.application.api.filter.ClientFilterTO;
-import br.com.manage.store.application.api.request.ClientRequest;
-import br.com.manage.store.application.api.response.ClientResponse;
-import br.com.manage.store.domain.entity.ClientEntity;
-import br.com.manage.store.domain.service.IClientService;
+import br.com.manage.store.application.api.ICustomerController;
+import br.com.manage.store.application.api.filter.CustomerFilterTO;
+import br.com.manage.store.application.api.request.CustomerRequest;
+import br.com.manage.store.application.api.response.CustomerResponse;
+import br.com.manage.store.domain.entity.CustomerEntity;
+import br.com.manage.store.domain.service.ICustomerService;
 import br.com.manage.store.infrastructure.component.specification.SpecificationFactory;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
@@ -17,18 +17,18 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-public class ClientController implements IClientController {
+public class CustomerController implements ICustomerController {
 
-    private final IClientService clientService;
-    private final SpecificationFactory<ClientEntity> specificationFactory;
+    private final ICustomerService clientService;
+    private final SpecificationFactory<CustomerEntity> specificationFactory;
 
     @Override
-    public ResponseEntity<ClientResponse> create(ClientRequest request) {
+    public ResponseEntity<CustomerResponse> create(CustomerRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(clientService.create(request));
     }
 
     @Override
-    public ResponseEntity<ClientResponse> findById(Long id) {
+    public ResponseEntity<CustomerResponse> findById(Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(clientService.findById(id));
     }
 
@@ -39,13 +39,13 @@ public class ClientController implements IClientController {
     }
 
     @Override
-    public ResponseEntity<ClientResponse> update(Long id, ClientRequest request) {
+    public ResponseEntity<CustomerResponse> update(Long id, CustomerRequest request) {
         return ResponseEntity.status(HttpStatus.OK).body(clientService.update(id, request));
     }
 
     @Override
-    public ResponseEntity<List<ClientResponse>> findAll(ClientFilterTO clientFilterTo, int size, int page) {
-        Specification<ClientEntity> specification = specificationFactory.create(clientFilterTo);
+    public ResponseEntity<List<CustomerResponse>> findAll(CustomerFilterTO customerFilterTo, int size, int page) {
+        Specification<CustomerEntity> specification = specificationFactory.create(customerFilterTo);
         return ResponseEntity.status(HttpStatus.OK).body(clientService.findAll(specification, size, page));
     }
 }

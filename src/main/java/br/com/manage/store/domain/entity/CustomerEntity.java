@@ -10,11 +10,11 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
-@Table(name = "tb_client")
+@Table(name = "tb_customer")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class ClientEntity {
+public class CustomerEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
