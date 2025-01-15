@@ -58,7 +58,7 @@ public class ProductService implements IProductService {
 
     @Override
     public ProductResponse update(Long id, ProductRequest request) {
-        notNull(List.of(id, request));
+        notNull(id, request);
         var product = productRepository.findById(id).orElseThrow(() -> new NotFoundException("ID: " + id));
         BeanUtils.copyProperties(request, product, "id");
         return mapper.map(productRepository.save(product), ProductResponse.class);
