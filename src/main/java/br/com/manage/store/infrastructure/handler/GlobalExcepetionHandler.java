@@ -9,9 +9,12 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -26,9 +29,38 @@ import java.util.List;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class GlobalExcepetionHandler extends ResponseEntityExceptionHandler {
 
-
     private final MessageService messageService;
 
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException exception,
+            HttpHeaders headers,
+            HttpStatusCode status,
+            WebRequest request) {
+
+        List<String> errors = exception.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                .toList();
+
+        ApiError<List<String>> response = new ApiError<>(errors);
+        response.setStatusCode(status.value());
+        response.setPath(request.getDescription(false));
+
+        return handleExceptionInternal(exception, response, headers, HttpStatus.BAD_REQUEST, request);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Object> handleDataIntegrityViolationException(
+            DataIntegrityViolationException exception,
+            WebRequest request) {
+
+        String key = "error.violation.optional";
+        Object[] args = {exception.getMessage()};
+
+        return handlerException(exception, HttpStatus.INTERNAL_SERVER_ERROR, request, key, args);
+    }
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<Object> handleNotFoundException(
@@ -66,7 +98,7 @@ public class GlobalExcepetionHandler extends ResponseEntityExceptionHandler {
 
     protected ResponseEntity<Object> handlerException(Exception exception, HttpStatus status, WebRequest request, String key, Object[] args) {
 
-        ApiError<List<String>> response = new ApiError<>(List.of((messageService.getMessage(key, args) + exception.getMessage())));
+        ApiError<List<String>> response = new ApiError<>(List.of((messageService.getMessage(key, args))));
         response.setStatusCode(status.value());
         response.setPath(request.getDescription(false));
 

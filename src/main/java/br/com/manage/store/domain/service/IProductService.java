@@ -1,6 +1,7 @@
 package br.com.manage.store.domain.service;
 
 import br.com.manage.store.application.api.request.ProductRequest;
+import br.com.manage.store.application.api.response.OptionalCategory;
 import br.com.manage.store.application.api.response.ProductResponse;
 import br.com.manage.store.domain.entity.ProductEntity;
 import org.springframework.data.jpa.domain.Specification;
@@ -18,4 +19,6 @@ public interface IProductService {
     ProductResponse update(Long id, ProductRequest request);
 
     List<ProductResponse> findAll(Specification<ProductEntity> specification, int size, int page);
+
+    List<OptionalCategory> findAllCategory();
 }

@@ -3,6 +3,7 @@ package br.com.manage.store.application.controller;
 import br.com.manage.store.application.api.IProductController;
 import br.com.manage.store.application.api.filter.ProductFilterTO;
 import br.com.manage.store.application.api.request.ProductRequest;
+import br.com.manage.store.application.api.response.OptionalCategory;
 import br.com.manage.store.application.api.response.ProductResponse;
 import br.com.manage.store.domain.entity.ProductEntity;
 import br.com.manage.store.domain.service.IProductService;
@@ -11,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -21,6 +23,11 @@ public class ProductController implements IProductController {
 
     private final IProductService productService;
     private final SpecificationFactory<ProductEntity> specificationFactory;
+
+    @GetMapping("categories")
+    public ResponseEntity<List<OptionalCategory>> category(){
+        return ResponseEntity.ok().body(productService.findAllCategory());
+    }
 
     @Override
     public ResponseEntity<ProductResponse> create(ProductRequest request) {

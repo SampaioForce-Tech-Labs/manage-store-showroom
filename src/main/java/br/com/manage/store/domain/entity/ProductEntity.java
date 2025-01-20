@@ -40,8 +40,13 @@ public class ProductEntity {
     @Column(name = "description")
     private String description;
 
+//    @Enumerated(EnumType.STRING)
     @Column(name = "category")
     private String category;
+
+//    @Enumerated(EnumType.STRING)
+    @Column(name = "subcategory")
+    private String subCategory;
 
     @CreationTimestamp
     @Column(name = "create_at", updatable = false)

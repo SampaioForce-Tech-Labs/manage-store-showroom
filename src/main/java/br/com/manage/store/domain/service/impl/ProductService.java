@@ -1,8 +1,11 @@
 package br.com.manage.store.domain.service.impl;
 
 import br.com.manage.store.application.api.request.ProductRequest;
+import br.com.manage.store.application.api.response.OptionalCategory;
 import br.com.manage.store.application.api.response.ProductResponse;
 import br.com.manage.store.domain.entity.ProductEntity;
+import br.com.manage.store.domain.enums.category.CategoryEnum;
+import br.com.manage.store.domain.enums.ISubcategory;
 import br.com.manage.store.domain.mapper.GenericMapper;
 import br.com.manage.store.domain.service.IProductService;
 import br.com.manage.store.infrastructure.handler.exceptions.NotFoundException;
@@ -17,7 +20,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static br.com.manage.store.infrastructure.util.ComparePrice.checkPrice;
 import static br.com.manage.store.infrastructure.util.VerifyNotNull.notNull;
@@ -69,5 +75,16 @@ public class ProductService implements IProductService {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
         Page<ProductEntity> products = productRepository.findAll(specification, pageable);
         return mapper.mapAll(products.stream().toList(), ProductResponse.class);
+    }
+
+    @Override
+    public List<OptionalCategory> findAllCategory() {
+        return Arrays.stream(CategoryEnum.values()).map(category -> {
+            List<String> subcategory = new ArrayList<>();
+            for (ISubcategory sub: category.getSubcategory()) {
+                subcategory.add(sub.getSubcategory());
+            }
+            return new OptionalCategory(category.getCategory(), subcategory);
+        }).collect(Collectors.toList());
     }
 }

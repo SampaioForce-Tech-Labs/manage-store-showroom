@@ -3,9 +3,10 @@ CREATE TABLE tb_product (
     name VARCHAR(60) NOT NULL,
     price DOUBLE NOT NULL,
     amount INT NOT NULL,
-    size_item VARCHAR(60),
+    size_item VARCHAR(20),
     stock INT NOT NULL,
-    category VARCHAR(50) NOT NULL,
+    category VARCHAR(20) NOT NULL,
+    subcategory VARCHAR(20) NOT NULL,
     create_at DATETIME,
     description TEXT
 )

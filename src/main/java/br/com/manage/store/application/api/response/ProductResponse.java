@@ -19,8 +19,8 @@ public class ProductResponse {
     private Integer amount;
     private String size;
     private Integer stock;
-    private String description;
     private String category;
+    private String subCategory;
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDateTime createAt;
 }
