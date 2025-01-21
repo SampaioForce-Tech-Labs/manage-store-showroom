@@ -1,5 +1,7 @@
 package br.com.manage.store.domain.entity;
 
+import br.com.manage.store.domain.enums.ISubcategory;
+import br.com.manage.store.domain.enums.category.CategoryEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -7,7 +7,7 @@ import br.com.manage.store.domain.mapper.GenericMapper;
 import br.com.manage.store.infrastructure.handler.exceptions.InvalidArgumentException;
 import br.com.manage.store.infrastructure.handler.exceptions.NotFoundException;
 import br.com.manage.store.infrastructure.repository.ProductRepository;
-import br.com.manage.store.infrastructure.util.VerifyNotNull;
+import br.com.manage.store.infrastructure.util.VerifyNotNullUtils;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -67,7 +67,6 @@ class ProductServiceTest {
             Assertions.assertEquals(productEntity.getAmount(), result.getAmount());
             Assertions.assertEquals(productEntity.getSize(), result.getSize());
             Assertions.assertEquals(productEntity.getCategory(), result.getCategory());
-            Assertions.assertEquals(productEntity.getDescription(), result.getDescription());
             Assertions.assertEquals(productEntity.getStock(), result.getStock());
             Assertions.assertEquals(ProductResponse.class, result.getClass());
             Mockito.verify(mapper).map(productRequest, ProductEntity.class);
@@ -81,8 +80,8 @@ class ProductServiceTest {
         @Test
         @DisplayName("Not should create the product whan the object or value is null")
         void notCreateProductAndGenerationExceptionOfVariableNull() {
-            try (MockedStatic<VerifyNotNull> mockedStatic = Mockito.mockStatic(VerifyNotNull.class)) {
-                mockedStatic.when(() -> VerifyNotNull.notNull(productRequest)).thenThrow(new InvalidArgumentException());
+            try (MockedStatic<VerifyNotNullUtils> mockedStatic = Mockito.mockStatic(VerifyNotNullUtils.class)) {
+                mockedStatic.when(() -> VerifyNotNullUtils.notNull(productRequest)).thenThrow(new InvalidArgumentException());
 
                 InvalidArgumentException argumentException = Assertions.assertThrows(InvalidArgumentException.class, () -> {
                     productService.create(productRequest);
@@ -235,8 +234,7 @@ class ProductServiceTest {
                 "Iphone 15",
                 BigDecimal.valueOf(4500.00),
                 9,
-                "",
-                9,
+                "10",
                 "Celular",
                 "Eletronicos"
         );
@@ -246,10 +244,11 @@ class ProductServiceTest {
                 "Iphone 15",
                 BigDecimal.valueOf(4500.00),
                 9,
-                "",
+                "10",
                 9,
                 "Celular",
-                "Eletronicos",
+                "Roupas",
+                "Masculino",
                 LocalDateTime.now()
         ));
 
@@ -261,7 +260,8 @@ class ProductServiceTest {
                 "",
                 9,
                 "Celular",
-                "Eletronicos",
+                "Roupas",
+                "Masculino",
                 LocalDateTime.now()
         );
 
@@ -273,7 +273,8 @@ class ProductServiceTest {
                 "",
                 9,
                 "Celular",
-                "Eletronicos",
+                "Roupas",
+                "Masculino",
                 LocalDateTime.now()
         );
 

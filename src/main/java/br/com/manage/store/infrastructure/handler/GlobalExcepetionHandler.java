@@ -2,6 +2,7 @@ package br.com.manage.store.infrastructure.handler;
 
 import br.com.manage.store.infrastructure.component.MessageService;
 import br.com.manage.store.infrastructure.handler.exceptions.ConflictException;
+import br.com.manage.store.infrastructure.handler.exceptions.IllegalEnumException;
 import br.com.manage.store.infrastructure.handler.exceptions.InvalidArgumentException;
 import br.com.manage.store.infrastructure.handler.exceptions.NotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -49,6 +50,17 @@ public class GlobalExcepetionHandler extends ResponseEntityExceptionHandler {
         response.setPath(request.getDescription(false));
 
         return handleExceptionInternal(exception, response, headers, HttpStatus.BAD_REQUEST, request);
+    }
+
+    @ExceptionHandler(IllegalEnumException.class)
+    public ResponseEntity<Object> handleIllegalEnumException(
+            IllegalEnumException exception,
+            WebRequest request) {
+
+        String key = "error.enum.invalid";
+        Object[] args = {exception.getMessage()};
+
+        return handlerException(exception, HttpStatus.INTERNAL_SERVER_ERROR, request, key, args);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)

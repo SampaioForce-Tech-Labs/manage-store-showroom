@@ -9,7 +9,7 @@ import lombok.Getter;
 public enum PerfumariaEnum implements ISubcategory {
     MARY_KEY("Mary Key"),
     NATURA("Natura"),
-    O_BOTICARIO("O Boticáário");
+    OBOTICARIO("O Boticáário");
 
     private final String subcategory;
 }

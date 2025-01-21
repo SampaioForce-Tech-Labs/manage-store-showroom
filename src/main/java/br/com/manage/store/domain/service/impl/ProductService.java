@@ -4,8 +4,8 @@ import br.com.manage.store.application.api.request.ProductRequest;
 import br.com.manage.store.application.api.response.OptionalCategory;
 import br.com.manage.store.application.api.response.ProductResponse;
 import br.com.manage.store.domain.entity.ProductEntity;
-import br.com.manage.store.domain.enums.category.CategoryEnum;
 import br.com.manage.store.domain.enums.ISubcategory;
+import br.com.manage.store.domain.enums.category.CategoryEnum;
 import br.com.manage.store.domain.mapper.GenericMapper;
 import br.com.manage.store.domain.service.IProductService;
 import br.com.manage.store.infrastructure.handler.exceptions.NotFoundException;
@@ -25,8 +25,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static br.com.manage.store.infrastructure.util.ComparePrice.checkPrice;
-import static br.com.manage.store.infrastructure.util.VerifyNotNull.notNull;
+import static br.com.manage.store.infrastructure.util.ComparePriceUtils.checkPrice;
+import static br.com.manage.store.infrastructure.util.EnumCheckerUtils.isValidEnum;
+import static br.com.manage.store.infrastructure.util.VerifyNotNullUtils.notNull;
 
 @Service
 @AllArgsConstructor
@@ -40,6 +41,7 @@ public class ProductService implements IProductService {
     public ProductResponse create(ProductRequest request) {
         notNull(request);
         checkPrice(request.getPrice());
+        isValidEnum(request);
         var entity = mapper.map(request, ProductEntity.class);
         return mapper.map(productRepository.save(entity), ProductResponse.class);
     }
@@ -58,7 +60,6 @@ public class ProductService implements IProductService {
         if (!productRepository.existsById(id)) {
             throw new NotFoundException("ID: " + id);
         }
-
         productRepository.deleteById(id);
     }
 
@@ -81,7 +82,7 @@ public class ProductService implements IProductService {
     public List<OptionalCategory> findAllCategory() {
         return Arrays.stream(CategoryEnum.values()).map(category -> {
             List<String> subcategory = new ArrayList<>();
-            for (ISubcategory sub: category.getSubcategory()) {
+            for (ISubcategory sub : category.getSubcategory()) {
                 subcategory.add(sub.getSubcategory());
             }
             return new OptionalCategory(category.getCategory(), subcategory);

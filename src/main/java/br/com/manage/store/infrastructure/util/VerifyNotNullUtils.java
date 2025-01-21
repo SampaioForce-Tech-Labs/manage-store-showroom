@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.util.ObjectUtils;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class VerifyNotNull {
+public class VerifyNotNullUtils {
 
     public static void notNull(Object... sources) {
 

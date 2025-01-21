@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static br.com.manage.store.infrastructure.util.VerifyNotNull.notNull;
+import static br.com.manage.store.infrastructure.util.VerifyNotNullUtils.notNull;
 
 @Service
 @AllArgsConstructor

@@ -2,6 +2,7 @@ package br.com.manage.store.application.api;
 
 import br.com.manage.store.application.api.filter.ProductFilterTO;
 import br.com.manage.store.application.api.request.ProductRequest;
+import br.com.manage.store.application.api.response.OptionalCategory;
 import br.com.manage.store.application.api.response.ProductResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
@@ -32,4 +33,6 @@ public interface IProductController {
             @RequestParam(name = "page", defaultValue = "0") int page
     );
 
+    @GetMapping("categories")
+    ResponseEntity<List<OptionalCategory>> category();
 }

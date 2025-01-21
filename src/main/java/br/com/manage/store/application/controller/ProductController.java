@@ -12,7 +12,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -23,11 +22,6 @@ public class ProductController implements IProductController {
 
     private final IProductService productService;
     private final SpecificationFactory<ProductEntity> specificationFactory;
-
-    @GetMapping("categories")
-    public ResponseEntity<List<OptionalCategory>> category(){
-        return ResponseEntity.ok().body(productService.findAllCategory());
-    }
 
     @Override
     public ResponseEntity<ProductResponse> create(ProductRequest request) {
@@ -54,5 +48,10 @@ public class ProductController implements IProductController {
     public ResponseEntity<List<ProductResponse>> findAll(ProductFilterTO filterTO, int size, int page) {
         Specification<ProductEntity> specification = specificationFactory.create(filterTO);
         return ResponseEntity.status(HttpStatus.OK).body(productService.findAll(specification, size, page));
+    }
+
+    @Override
+    public ResponseEntity<List<OptionalCategory>> category(){
+        return ResponseEntity.ok().body(productService.findAllCategory());
     }
 }

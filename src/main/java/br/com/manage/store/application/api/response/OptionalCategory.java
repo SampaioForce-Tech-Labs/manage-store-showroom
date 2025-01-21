@@ -11,6 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 public class OptionalCategory {
 
-    private String categoryEnum;
-    private List<String> subCategorys;
+    private String category;
+    private List<String> subCategories;
 }
