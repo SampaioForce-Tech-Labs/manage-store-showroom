@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0.33
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: admin          # Senha do usuário root
+      MYSQL_DATABASE: mysql-linux           # Cria o banco de dados 'mysql-linux'
+    ports:
+      - "3306:3306"  # Mapeia a porta 3306 do contêiner para a porta 3306 do host
+    networks:
+      - network-host  # Usando a rede customizada 'network-host'
+    restart: always
+
+networks:
+  network-host:
+    external: true  # Usa uma rede externa chamada 'network-host'
+
