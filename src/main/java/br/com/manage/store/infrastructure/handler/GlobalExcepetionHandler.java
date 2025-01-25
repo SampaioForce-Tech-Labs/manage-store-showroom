@@ -110,7 +110,7 @@ public class GlobalExcepetionHandler extends ResponseEntityExceptionHandler {
 
     protected ResponseEntity<Object> handlerException(Exception exception, HttpStatus status, WebRequest request, String key, Object[] args) {
 
-        ApiError<List<String>> response = new ApiError<>(List.of((messageService.getMessage(key, args))));
+        ApiError<List<String>> response = new ApiError<>(List.of((messageService.getMessage(key, args) + " " + exception.getMessage())));
         response.setStatusCode(status.value());
         response.setPath(request.getDescription(false));
 

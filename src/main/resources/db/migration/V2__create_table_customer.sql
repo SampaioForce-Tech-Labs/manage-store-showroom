@@ -2,7 +2,7 @@ CREATE TABLE tb_customer(
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(60) NOT NULL,
     cpf VARCHAR(11) UNIQUE,
-    email VARCHAR(60),
+    email VARCHAR(60) UNIQUE,
     phone VARCHAR(15),
     date_birth DATE,
     zip_code VARCHAR(8),

@@ -1,7 +1,5 @@
 package br.com.manage.store.domain.entity;
 
-import br.com.manage.store.domain.enums.ISubcategory;
-import br.com.manage.store.domain.enums.category.CategoryEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -42,11 +40,11 @@ public class ProductEntity {
     @Column(name = "description")
     private String description;
 
-//    @Enumerated(EnumType.STRING)
+    //    @Enumerated(EnumType.STRING)
     @Column(name = "category")
     private String category;
 
-//    @Enumerated(EnumType.STRING)
+    //    @Enumerated(EnumType.STRING)
     @Column(name = "subcategory")
     private String subCategory;
 

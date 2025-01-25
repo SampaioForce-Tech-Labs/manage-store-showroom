@@ -5,8 +5,7 @@ import br.com.manage.store.application.api.response.CustomerResponse;
 import br.com.manage.store.domain.entity.CustomerEntity;
 import br.com.manage.store.domain.mapper.GenericMapper;
 import br.com.manage.store.domain.service.ICustomerService;
-import br.com.manage.store.infrastructure.handler.exceptions.ConflictException;
-import br.com.manage.store.infrastructure.handler.exceptions.NotFoundException;
+import br.com.manage.store.infrastructure.component.VerifyExists;
 import br.com.manage.store.infrastructure.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -27,15 +26,14 @@ import static br.com.manage.store.infrastructure.util.VerifyNotNullUtils.notNull
 public class CustomerService implements ICustomerService {
 
     private final CustomerRepository customerRepository;
+    private final VerifyExists verifyExists;
     private final GenericMapper mapper;
 
     @Transactional
     @Override
     public CustomerResponse create(CustomerRequest request) {
         notNull(request);
-        if (customerRepository.existsByCpf(request.getCpf())){
-            throw new ConflictException("CPF: " + request.getCpf());
-        }
+        verifyExists.verifyConflictEmailOrCpf(request.getEmail(), request.getCpf());
         var customer = customerRepository.save(mapper.map(request, CustomerEntity.class));
         return mapper.map(customer, CustomerResponse.class);
     }
@@ -43,17 +41,15 @@ public class CustomerService implements ICustomerService {
     @Override
     public CustomerResponse findById(Long id) {
         notNull(id);
-        var custormer = customerRepository.findById(id).orElseThrow(() -> new NotFoundException("ID: " + id));
-        return mapper.map(custormer, CustomerResponse.class);
+        var customer = verifyExists.getEntityExists(id);
+        return mapper.map(customer, CustomerResponse.class);
     }
 
     @Transactional
     @Override
     public void delete(Long id) {
         notNull(id);
-        if (!customerRepository.existsById(id)){
-            throw new NotFoundException("ID: " + id);
-        }
+        verifyExists.verifyExists(id);
         customerRepository.deleteById(id);
     }
 
@@ -61,9 +57,10 @@ public class CustomerService implements ICustomerService {
     @Override
     public CustomerResponse update(Long id, CustomerRequest request) {
         notNull(id, request);
-        var custormer = customerRepository.findById(id).orElseThrow(() -> new NotFoundException("ID: " + id));
-        BeanUtils.copyProperties(request, custormer, "id");
-        return mapper.map(customerRepository.save(custormer), CustomerResponse.class);
+        var customer = verifyExists.getEntityExists(id);
+        verifyExists.verifyConflict(customer, request);
+        BeanUtils.copyProperties(request, customer, "id");
+        return mapper.map(customerRepository.save(customer), CustomerResponse.class);
     }
 
     @Override
