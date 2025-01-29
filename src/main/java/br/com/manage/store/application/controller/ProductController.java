@@ -20,6 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ProductController implements IProductController {
 
+
     private final IProductService productService;
     private final SpecificationFactory<ProductEntity> specificationFactory;
 
@@ -51,7 +52,7 @@ public class ProductController implements IProductController {
     }
 
     @Override
-    public ResponseEntity<List<OptionalCategory>> category(){
+    public ResponseEntity<List<OptionalCategory>> category() {
         return ResponseEntity.ok().body(productService.findAllCategory());
     }
 }

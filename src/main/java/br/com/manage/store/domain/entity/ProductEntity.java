@@ -22,6 +22,9 @@ public class ProductEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "code")
+    private String code;
+
     @Column(name = "name")
     private String name;
 
@@ -40,18 +43,15 @@ public class ProductEntity {
     @Column(name = "description")
     private String description;
 
-    //    @Enumerated(EnumType.STRING)
     @Column(name = "category")
     private String category;
 
-    //    @Enumerated(EnumType.STRING)
     @Column(name = "subcategory")
     private String subCategory;
 
     @CreationTimestamp
     @Column(name = "create_at", updatable = false)
     private LocalDateTime createAt;
-
 }
 
 

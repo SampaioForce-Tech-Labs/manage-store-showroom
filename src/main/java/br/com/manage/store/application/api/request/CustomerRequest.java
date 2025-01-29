@@ -7,7 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.br.CPF;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -29,4 +31,5 @@ public class CustomerRequest {
     private String neighborhood;
     private String city;
     private String state;
+    private List<PersonReferenceRequest> referenceRequests = new ArrayList<>();
 }

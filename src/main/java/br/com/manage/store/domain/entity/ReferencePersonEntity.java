@@ -4,19 +4,13 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Entity
-@Table(name = "tb_customer")
+@Table(name = "tb_person_reference")
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class CustomerEntity {
+public class ReferencePersonEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,17 +19,8 @@ public class CustomerEntity {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "cpf")
-    private String cpf;
-
-    @Column(name = "email")
-    private String email;
-
     @Column(name = "phone")
     private String phone;
-
-    @Column(name = "date_birth")
-    private Date dateBirth;
 
     @Column(name = "zip_code")
     private String zipCode;
@@ -46,11 +31,11 @@ public class CustomerEntity {
     @Column(name = "number_address")
     private String numberAddress;
 
-    @Column(name = "complement")
-    private String complement;
-
     @Column(name = "neighborhood")
     private String neighborhood;
+
+    @Column(name = "complement")
+    private String complement;
 
     @Column(name = "city")
     private String city;
@@ -58,10 +43,10 @@ public class CustomerEntity {
     @Column(name = "state")
     private String state;
 
-    @CreationTimestamp
-    @Column(name = "create_at", updatable = false)
-    private LocalDateTime createAt;
+    @Column(name = "observation")
+    private String observation;
 
-    @OneToMany(mappedBy = "customerEntity", cascade = {CascadeType.ALL}, orphanRemoval = true)
-    private List<ReferencePersonEntity> referenceEntityList = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id", nullable = false)
+    private CustomerEntity customerEntity;
 }

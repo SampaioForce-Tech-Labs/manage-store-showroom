@@ -1,5 +1,6 @@
-CREATE TABLE tb_product (
+CREATE TABLE tb_product(
     id INT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(50) UNIQUE,
     name VARCHAR(60) NOT NULL,
     price DOUBLE NOT NULL,
     amount INT NOT NULL,

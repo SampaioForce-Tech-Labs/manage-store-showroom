@@ -20,3 +20,5 @@ spring:
     user: ${MYSQL_USER}
     password: ${MYSQL_PASSWORD}
     locations: classpath:db/migration
+cors:
+  allowedorigins: ${CORS_ALLONEORIGINS}

@@ -15,6 +15,7 @@ public class ProductRequest {
 
     @NotBlank(message = "{error.notblank.name}")
     private String name;
+    private String code;
     @NotNull(message = "{error.notnull.price}")
     private BigDecimal price;
     @NotNull(message = "{error.notnull.amount}")

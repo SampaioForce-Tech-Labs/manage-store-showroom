@@ -3,6 +3,7 @@ package br.com.manage.store.domain.service.impl;
 import br.com.manage.store.application.api.request.CustomerRequest;
 import br.com.manage.store.application.api.response.CustomerResponse;
 import br.com.manage.store.domain.entity.CustomerEntity;
+import br.com.manage.store.domain.entity.ReferencePersonEntity;
 import br.com.manage.store.domain.mapper.GenericMapper;
 import br.com.manage.store.domain.service.ICustomerService;
 import br.com.manage.store.infrastructure.component.VerifyExists;
@@ -34,8 +35,11 @@ public class CustomerService implements ICustomerService {
     public CustomerResponse create(CustomerRequest request) {
         notNull(request);
         verifyExists.verifyConflictEmailOrCpf(request.getEmail(), request.getCpf());
-        var customer = customerRepository.save(mapper.map(request, CustomerEntity.class));
-        return mapper.map(customer, CustomerResponse.class);
+        var customerEntity = mapper.map(request, CustomerEntity.class);
+        var referencePerson = mapper.mapAll(request.getReferenceRequests(), ReferencePersonEntity.class);
+        referencePerson.forEach(ref -> ref.setCustomerEntity(customerEntity));
+        customerEntity.setReferenceEntityList(referencePerson);
+        return mapper.map(customerRepository.save(customerEntity), CustomerResponse.class);
     }
 
     @Override
