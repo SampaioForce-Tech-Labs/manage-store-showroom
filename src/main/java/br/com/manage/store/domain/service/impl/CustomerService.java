@@ -36,9 +36,10 @@ public class CustomerService implements ICustomerService {
         notNull(request);
         verifyExists.verifyConflictEmailOrCpf(request.getEmail(), request.getCpf());
         var customerEntity = mapper.map(request, CustomerEntity.class);
-        var referencePerson = mapper.mapAll(request.getReferenceRequests(), ReferencePersonEntity.class);
-        referencePerson.forEach(ref -> ref.setCustomerEntity(customerEntity));
-        customerEntity.setReferenceEntityList(referencePerson);
+        var personList = mapper.mapAll(request.getReferenceEntityList(), ReferencePersonEntity.class);
+        personList.forEach(ref ->
+                ref.setCustomerEntity(customerEntity));
+        customerEntity.setReferenceEntityList(personList);
         return mapper.map(customerRepository.save(customerEntity), CustomerResponse.class);
     }
 

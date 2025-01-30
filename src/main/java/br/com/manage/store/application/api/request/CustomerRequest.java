@@ -1,5 +1,6 @@
 package br.com.manage.store.application.api.request;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -24,12 +25,8 @@ public class CustomerRequest {
     private String email;
     private String phone;
     private Date dateBirth;
-    private String zipCode;
-    private String address;
-    private String numberAddress;
-    private String complement;
-    private String neighborhood;
-    private String city;
-    private String state;
-    private List<PersonReferenceRequest> referenceRequests = new ArrayList<>();
+    @Valid
+    private AddressRequest addressData;
+    @Valid
+    private List<ReferencePersonRequest> referenceEntityList = new ArrayList<>();
 }

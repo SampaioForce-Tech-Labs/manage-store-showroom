@@ -22,6 +22,7 @@ public class GenericMapper {
 
     public <T, O> List<T> mapAll(List<O> sources, Class<T> sourceClass) {
         notNull(List.of(sources, sourceClass));
-        return sources.stream().map(list -> modelMapper.map(list, sourceClass)).collect(Collectors.toList());
+        return sources.stream().map(list ->
+                modelMapper.map(list, sourceClass)).collect(Collectors.toList());
     }
 }

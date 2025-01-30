@@ -4,7 +4,7 @@ CREATE TABLE tb_reference_person(
     phone VARCHAR(15),
     zip_code VARCHAR(8),
     address VARCHAR(60),
-    number_address VARCHAR(10),
+    number VARCHAR(10),
     neighborhood VARCHAR(20),
     complement VARCHAR(20),
     city VARCHAR(20),

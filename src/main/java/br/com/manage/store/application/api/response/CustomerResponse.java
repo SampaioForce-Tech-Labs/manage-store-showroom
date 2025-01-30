@@ -1,5 +1,6 @@
 package br.com.manage.store.application.api.response;
 
+import br.com.manage.store.application.api.request.AddressRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,12 +19,6 @@ public class CustomerResponse {
     private String email;
     private String phone;
     private Date dateBirth;
-    private String zipCode;
-    private String address;
-    private String numberAddress;
-    private String complement;
-    private String neighborhood;
-    private String city;
-    private String state;
+    private AddressRequest addressData;
     private LocalDateTime createAt;
 }
