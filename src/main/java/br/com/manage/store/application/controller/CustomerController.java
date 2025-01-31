@@ -8,6 +8,7 @@ import br.com.manage.store.domain.entity.CustomerEntity;
 import br.com.manage.store.domain.service.ICustomerService;
 import br.com.manage.store.infrastructure.component.specification.SpecificationFactory;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +45,7 @@ public class CustomerController implements ICustomerController {
     }
 
     @Override
-    public ResponseEntity<List<CustomerResponse>> findAll(CustomerFilterTO customerFilterTo, int size, int page) {
+    public ResponseEntity<Page<CustomerResponse>> findAll(CustomerFilterTO customerFilterTo, int size, int page) {
         Specification<CustomerEntity> specification = specificationFactory.create(customerFilterTo);
         return ResponseEntity.status(HttpStatus.OK).body(clientService.findAll(specification, size, page));
     }

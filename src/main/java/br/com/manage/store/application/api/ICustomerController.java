@@ -4,6 +4,7 @@ import br.com.manage.store.application.api.filter.CustomerFilterTO;
 import br.com.manage.store.application.api.request.CustomerRequest;
 import br.com.manage.store.application.api.response.CustomerResponse;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,7 @@ public interface ICustomerController {
     ResponseEntity<CustomerResponse> update(@PathVariable Long id, @RequestBody @Valid CustomerRequest request);
 
     @GetMapping(value = "/find-all", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<List<CustomerResponse>> findAll(
+    ResponseEntity<Page<CustomerResponse>> findAll(
             CustomerFilterTO customerFilterTo,
             @RequestParam(name = "size", defaultValue = "5") int size,
             @RequestParam(name = "page", defaultValue = "0") int page

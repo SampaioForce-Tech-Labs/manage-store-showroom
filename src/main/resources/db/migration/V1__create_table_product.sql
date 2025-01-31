@@ -5,7 +5,6 @@ CREATE TABLE tb_product(
     price DOUBLE NOT NULL,
     amount INT NOT NULL,
     size_item VARCHAR(20),
-    stock INT NOT NULL,
     category VARCHAR(20) NOT NULL,
     subcategory VARCHAR(20) NOT NULL,
     create_at DATETIME,

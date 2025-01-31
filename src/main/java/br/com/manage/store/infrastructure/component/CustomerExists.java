@@ -10,11 +10,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 @AllArgsConstructor
-public class VerifyExists {
+public class CustomerExists {
 
     private final CustomerRepository customerRepository;
 
-    public void verifyExists(Object source) {
+    public void verifyExistsCustomer(Object source) {
         if (source instanceof Long && !customerRepository.existsById((Long) source)) {
             throw new NotFoundException("ID: " + source.toString());
         } else if (source instanceof String && customerRepository.existsByCpf((String) source)) {
@@ -22,7 +22,7 @@ public class VerifyExists {
         }
     }
 
-    public void verifyConflict(CustomerEntity entity, CustomerRequest request) {
+    public void verifyConflictCustomer(CustomerEntity entity, CustomerRequest request) {
         if (!entity.getCpf().equals(request.getCpf()) && customerRepository.existsByCpf(request.getCpf())) {
             throw new ConflictException("CPF: " + request.getCpf());
         }
@@ -40,7 +40,7 @@ public class VerifyExists {
         }
     }
 
-    public CustomerEntity getEntityExists(Long source) {
+    public CustomerEntity getEntityExistsIdCustomer(Long source) {
         return customerRepository.findById(source).orElseThrow(() -> new NotFoundException("ID: " + source.toString()));
     }
 }

@@ -9,6 +9,7 @@ import br.com.manage.store.domain.entity.ProductEntity;
 import br.com.manage.store.domain.service.IProductService;
 import br.com.manage.store.infrastructure.component.specification.SpecificationFactory;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,7 +47,7 @@ public class ProductController implements IProductController {
     }
 
     @Override
-    public ResponseEntity<List<ProductResponse>> findAll(ProductFilterTO filterTO, int size, int page) {
+    public ResponseEntity<Page<ProductResponse>> findAll(ProductFilterTO filterTO, int size, int page) {
         Specification<ProductEntity> specification = specificationFactory.create(filterTO);
         return ResponseEntity.status(HttpStatus.OK).body(productService.findAll(specification, size, page));
     }

@@ -8,14 +8,12 @@ import br.com.manage.store.domain.enums.ISubcategory;
 import br.com.manage.store.domain.enums.category.CategoryEnum;
 import br.com.manage.store.domain.mapper.GenericMapper;
 import br.com.manage.store.domain.service.IProductService;
+import br.com.manage.store.infrastructure.component.ProductExists;
 import br.com.manage.store.infrastructure.handler.exceptions.NotFoundException;
 import br.com.manage.store.infrastructure.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,11 +33,13 @@ public class ProductService implements IProductService {
 
     private final ProductRepository productRepository;
     private final GenericMapper mapper;
+    private final ProductExists productExists;
 
     @Transactional
     @Override
     public ProductResponse create(ProductRequest request) {
         notNull(request);
+        productExists.verifyConflictProduct(request.getCode());
         checkPrice(request.getPrice());
         isValidEnum(request);
         var entity = mapper.map(request, ProductEntity.class);
@@ -57,25 +57,25 @@ public class ProductService implements IProductService {
     @Override
     public void delete(Long id) {
         notNull(id);
-        if (!productRepository.existsById(id)) {
-            throw new NotFoundException("ID: " + id);
-        }
+        productExists.verifyExistsIdProduct(id);
         productRepository.deleteById(id);
     }
 
     @Override
     public ProductResponse update(Long id, ProductRequest request) {
         notNull(id, request);
-        var product = productRepository.findById(id).orElseThrow(() -> new NotFoundException("ID: " + id));
+        isValidEnum(request);
+        var product = productExists.getProductExists(id);
+        productExists.verifyConflictEntityAndRequestCode(product, request);
         BeanUtils.copyProperties(request, product, "id");
         return mapper.map(productRepository.save(product), ProductResponse.class);
     }
 
     @Override
-    public List<ProductResponse> findAll(Specification<ProductEntity> specification, int size, int page) {
+    public Page<ProductResponse> findAll(Specification<ProductEntity> specification, int size, int page) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
         Page<ProductEntity> products = productRepository.findAll(specification, pageable);
-        return mapper.mapAll(products.stream().toList(), ProductResponse.class);
+        return new PageImpl<>(mapper.mapAll(products.stream().toList(), ProductResponse.class), pageable, products.getTotalElements());
     }
 
     @Override

@@ -37,9 +37,6 @@ public class ProductEntity {
     @Column(name = "size_item")
     private String size;
 
-    @Column(name = "stock")
-    private int stock;
-
     @Column(name = "description")
     private String description;
 

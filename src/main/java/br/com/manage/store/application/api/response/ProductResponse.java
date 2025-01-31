@@ -19,7 +19,6 @@ public class ProductResponse {
     private BigDecimal price;
     private Integer amount;
     private String size;
-    private Integer stock;
     private String category;
     private String subCategory;
     @JsonFormat(pattern = "dd/MM/yyyy")

@@ -38,17 +38,14 @@ public class GlobalExcepetionHandler extends ResponseEntityExceptionHandler {
             HttpHeaders headers,
             HttpStatusCode status,
             WebRequest request) {
-
         List<String> errors = exception.getBindingResult()
                 .getFieldErrors()
                 .stream()
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
                 .toList();
-
         ApiError<List<String>> response = new ApiError<>(errors);
         response.setStatusCode(status.value());
         response.setPath(request.getDescription(false));
-
         return handleExceptionInternal(exception, response, headers, HttpStatus.BAD_REQUEST, request);
     }
 
@@ -56,10 +53,8 @@ public class GlobalExcepetionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleIllegalEnumException(
             IllegalEnumException exception,
             WebRequest request) {
-
         String key = "error.enum.invalid";
         Object[] args = {exception.getMessage()};
-
         return handlerException(exception, HttpStatus.INTERNAL_SERVER_ERROR, request, key, args);
     }
 
@@ -67,10 +62,8 @@ public class GlobalExcepetionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleDataIntegrityViolationException(
             DataIntegrityViolationException exception,
             WebRequest request) {
-
         String key = "error.violation.optional";
         Object[] args = {exception.getMessage()};
-
         return handlerException(exception, HttpStatus.INTERNAL_SERVER_ERROR, request, key, args);
     }
 
@@ -78,10 +71,8 @@ public class GlobalExcepetionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleNotFoundException(
             NotFoundException exception,
             WebRequest request) {
-
         String key = "error.notfound.argument";
         Object[] args = {exception.getMessage()};
-
         return handlerException(exception, HttpStatus.NOT_FOUND, request, key, args);
     }
 
@@ -89,10 +80,8 @@ public class GlobalExcepetionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleInvalidArgumentException(
             InvalidArgumentException exception,
             WebRequest request) {
-
         String key = "error.invalid.argument";
         Object[] args = {exception.getMessage()};
-
         return handlerException(exception, HttpStatus.BAD_REQUEST, request, key, args);
     }
 
@@ -101,21 +90,16 @@ public class GlobalExcepetionHandler extends ResponseEntityExceptionHandler {
             ConflictException exception,
             WebRequest request,
             HttpServletRequest http) {
-
         String key = "error.conflict.value";
         Object[] args = {exception.getMessage()};
-
         return handlerException(exception, HttpStatus.BAD_REQUEST, request, key, args);
     }
 
     protected ResponseEntity<Object> handlerException(Exception exception, HttpStatus status, WebRequest request, String key, Object[] args) {
-
-        ApiError<List<String>> response = new ApiError<>(List.of((messageService.getMessage(key, args))));
+        ApiError<List<String>> response = new ApiError<>(List.of((messageService.getMessage(key, args) + " :: " + exception.getMessage())));
         response.setStatusCode(status.value());
         response.setPath(request.getDescription(false));
-
-        log.error("ERROR: {} :: MESSAGE: {}", response, exception.getMessage() );
-
+        log.error("ERROR: {} :: MESSAGE: {}", response, exception.getMessage());
         return handleExceptionInternal(exception, response, new HttpHeaders(), status, request);
     }
 }
