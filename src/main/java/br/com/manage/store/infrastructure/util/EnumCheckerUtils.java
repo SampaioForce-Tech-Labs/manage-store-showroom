@@ -17,10 +17,7 @@ public class EnumCheckerUtils {
     public static void isValidEnum(ProductRequest request) {
         try {
             var category = CategoryEnum.valueOf(replaceAll(request.getCategory()));
-            if (Arrays.stream(category.getSubcategory())
-                    .filter(f ->
-                            f.getSubcategory().equals(request.getSubCategory()))
-                    .collect(Collectors.toList()).isEmpty()) {
+            if (Arrays.stream(category.getSubcategory()).filter(f -> f.getSubcategory().equals(request.getSubCategory())).collect(Collectors.toList()).isEmpty()) {
                 throw new IllegalEnumException("SUBCATEGORIA: " + request.getSubCategory());
             }
         } catch (IllegalArgumentException ex) {

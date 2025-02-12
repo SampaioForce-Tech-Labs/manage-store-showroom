@@ -1,12 +1,12 @@
 package br.com.manage.store.application.api.response;
 
-import br.com.manage.store.application.api.request.AddressRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -19,6 +19,20 @@ public class CustomerResponse {
     private String email;
     private String phone;
     private Date dateBirth;
-    private AddressRequest addressData;
+    private AddressResponse addressData;
+    private String maritalStatus;
+    private String enterprise;
+    private String businessPhone;
+    private String lengthService;
+    private String businessZipCode;
+    private String businessAddress;
+    private String businessCity;
+    private String businessState;
+    private String businessPosition;
+    private String bank;
+    private String agency;
+    private String father;
+    private String mother;
+    private List<ReferencePersonResponse> referenceEntityList;
     private LocalDateTime createAt;
 }

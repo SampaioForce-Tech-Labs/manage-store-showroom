@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static br.com.manage.store.infrastructure.util.CalcDiscountUtil.discount;
 import static br.com.manage.store.infrastructure.util.ComparePriceUtils.checkPrice;
 import static br.com.manage.store.infrastructure.util.EnumCheckerUtils.isValidEnum;
 import static br.com.manage.store.infrastructure.util.VerifyNotNullUtils.notNull;
@@ -43,6 +44,7 @@ public class ProductService implements IProductService {
         checkPrice(request.getPrice());
         isValidEnum(request);
         var entity = mapper.map(request, ProductEntity.class);
+        entity.setPriceWithDiscount(discount(request.getDiscountPercentage(), request.getPrice()));
         return mapper.map(productRepository.save(entity), ProductResponse.class);
     }
 
@@ -68,6 +70,7 @@ public class ProductService implements IProductService {
         var product = productExists.getProductExists(id);
         productExists.verifyConflictEntityAndRequestCode(product, request);
         BeanUtils.copyProperties(request, product, "id");
+        product.setPriceWithDiscount(discount(request.getDiscountPercentage(), request.getPrice()));
         return mapper.map(productRepository.save(product), ProductResponse.class);
     }
 

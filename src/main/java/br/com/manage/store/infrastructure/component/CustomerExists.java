@@ -7,6 +7,7 @@ import br.com.manage.store.infrastructure.handler.exceptions.NotFoundException;
 import br.com.manage.store.infrastructure.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 @Component
 @AllArgsConstructor
@@ -23,11 +24,15 @@ public class CustomerExists {
     }
 
     public void verifyConflictCustomer(CustomerEntity entity, CustomerRequest request) {
-        if (!entity.getCpf().equals(request.getCpf()) && customerRepository.existsByCpf(request.getCpf())) {
-            throw new ConflictException("CPF: " + request.getCpf());
+        if (StringUtils.hasText(request.getCpf())) {
+            if (!entity.getCpf().equals(request.getCpf()) && customerRepository.existsByCpf(request.getCpf())) {
+                throw new ConflictException("CPF: " + request.getCpf());
+            }
         }
-        if (!entity.getEmail().equals(request.getEmail()) && customerRepository.existsByEmail(request.getEmail())) {
-            throw new ConflictException("EMAIL: " + request.getEmail());
+        if (StringUtils.hasText(request.getEmail())) {
+            if (!entity.getEmail().equals(request.getEmail()) && customerRepository.existsByEmail(request.getEmail())) {
+                throw new ConflictException("EMAIL: " + request.getEmail());
+            }
         }
     }
 

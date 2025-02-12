@@ -9,8 +9,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ComparePriceUtils {
 
-    public static void checkPrice(BigDecimal price){
-        if (price.compareTo(BigDecimal.ZERO) < 0){
+    public static void checkPrice(BigDecimal price) {
+        if (price.compareTo(BigDecimal.ZERO) < 0) {
             throw new InvalidArgumentException("PREÇO R$ " + price);
         }
     }

@@ -9,7 +9,6 @@ import br.com.manage.store.domain.service.ICustomerService;
 import br.com.manage.store.infrastructure.component.CustomerExists;
 import br.com.manage.store.infrastructure.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -32,8 +31,7 @@ public class CustomerService implements ICustomerService {
         customerExists.verifyConflictEmailOrCpf(request.getEmail(), request.getCpf());
         var customerEntity = mapper.map(request, CustomerEntity.class);
         var personList = mapper.mapAll(request.getReferenceEntityList(), ReferencePersonEntity.class);
-        personList.forEach(ref ->
-                ref.setCustomerEntity(customerEntity));
+        personList.forEach(ref -> ref.setCustomerEntity(customerEntity));
         customerEntity.setReferenceEntityList(personList);
         return mapper.map(customerRepository.save(customerEntity), CustomerResponse.class);
     }
@@ -41,8 +39,7 @@ public class CustomerService implements ICustomerService {
     @Override
     public CustomerResponse findById(Long id) {
         notNull(id);
-        var customer = customerExists.getEntityExistsIdCustomer(id);
-        return mapper.map(customer, CustomerResponse.class);
+        return mapper.map(customerExists.getEntityExistsIdCustomer(id), CustomerResponse.class);
     }
 
     @Transactional
@@ -59,8 +56,10 @@ public class CustomerService implements ICustomerService {
         notNull(id, request);
         var customer = customerExists.getEntityExistsIdCustomer(id);
         customerExists.verifyConflictCustomer(customer, request);
-        BeanUtils.copyProperties(request, customer, "id");
-        return mapper.map(customerRepository.save(customer), CustomerResponse.class);
+        var customerRequest = mapper.map(request, CustomerEntity.class);
+        customerRequest.setId(customer.getId());
+        customerRequest.getReferenceEntityList().forEach(ref -> ref.setCustomerEntity(customerRequest));
+        return mapper.map(customerRepository.save(customerRequest), CustomerResponse.class);
     }
 
     @Override

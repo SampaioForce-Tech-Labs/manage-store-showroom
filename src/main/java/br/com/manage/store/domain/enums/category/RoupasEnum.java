@@ -8,10 +8,10 @@ import lombok.Getter;
 @Getter
 public enum RoupasEnum implements ISubcategory {
     MASCULINO("Masculino"),
-    FEMININO("Feminina"),
+    FEMININO("Feminino"),
     JUVENIL("Juvenil"),
     INFANTIL("Infantil"),
-    MODAPRAIA("Moda praia"),
+    MODA_PRAIA("Moda Praia"),
     CAMA("Cama"),
     MESA("Mesa"),
     BANHO("Banho");

@@ -58,6 +58,15 @@ public class GlobalExcepetionHandler extends ResponseEntityExceptionHandler {
         return handlerException(exception, HttpStatus.INTERNAL_SERVER_ERROR, request, key, args);
     }
 
+//    @ExceptionHandler(NullPointerException.class)
+//    public ResponseEntity<Object> handleNullPointerException(
+//            NullPointerException exception,
+//            WebRequest request) {
+//        String key = "error.violation.optional";
+//        Object[] args = {exception.getMessage()};
+//        return handlerException(exception, HttpStatus.INTERNAL_SERVER_ERROR, request, key, args);
+//    }
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Object> handleDataIntegrityViolationException(
             DataIntegrityViolationException exception,

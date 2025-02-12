@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 public enum AcessoriosEnum implements ISubcategory {
     BOLSAS("Bolsa"),
-    CARTEIRAS("Cateiras"),
+    CARTEIRAS("Carteiras"),
     CINTOS("Cintos"),
     OCULOS("Ó culos"),
     SEMIJOIAS("Semijoias");

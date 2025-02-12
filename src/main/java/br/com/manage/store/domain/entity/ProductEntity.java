@@ -28,6 +28,12 @@ public class ProductEntity {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "price_with_discount")
+    private BigDecimal priceWithDiscount;
+
+    @Column(name = "discount_percentage")
+    private double discountPercentage;
+
     @Column(name = "price")
     private BigDecimal price;
 

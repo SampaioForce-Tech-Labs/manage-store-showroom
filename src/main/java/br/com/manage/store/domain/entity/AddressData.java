@@ -26,8 +26,8 @@ public class AddressData implements Serializable {
     @Column(name = "complement")
     private String complement;
 
-    @Column(name = "neighborhood")
-    private String neighborhood;
+    @Column(name = "references_point")
+    private String referencePoint;
 
     @Column(name = "city")
     private String city;

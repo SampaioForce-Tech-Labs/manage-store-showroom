@@ -30,11 +30,8 @@ public class ReferencePersonEntity implements Serializable {
     @Embedded
     private AddressData addressData;
 
-    @Column(name = "observation")
-    private String observation;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", nullable = false)
+    @JoinColumn(name = "reference_person_customer_id", nullable = false)
     @JsonIgnore
     private CustomerEntity customerEntity;
 }
