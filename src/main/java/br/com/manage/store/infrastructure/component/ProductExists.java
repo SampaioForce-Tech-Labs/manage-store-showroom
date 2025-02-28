@@ -27,13 +27,16 @@ public class ProductExists {
     }
 
     public ProductEntity getProductExists(Long id) {
-        return productRepository.findById(id).orElseThrow(() ->
-                new NotFoundException("ID: " + id));
+        return productRepository.findById(id).orElseThrow(() -> new NotFoundException("ID: " + id));
+    }
+
+    public ProductEntity getProductExistsCode(String code) {
+        return productRepository.findByCode(code).orElseThrow(() -> new NotFoundException("Código: " + code));
     }
 
     public void verifyConflictEntityAndRequestCode(ProductEntity product, ProductRequest request) {
-        if (!product.getCode().equals(request.getCode())){
-            if (productRepository.existsByCode(request.getCode())){
+        if (!product.getCode().equals(request.getCode())) {
+            if (productRepository.existsByCode(request.getCode())) {
                 throw new ConflictException("Código: " + request.getCode());
             }
         }

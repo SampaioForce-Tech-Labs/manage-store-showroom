@@ -2,11 +2,14 @@ package br.com.manage.store.domain.service.impl;
 
 import br.com.manage.store.application.api.request.SalesCalcRequest;
 import br.com.manage.store.application.api.request.SalesRequest;
+import br.com.manage.store.application.api.response.ProductResponse;
 import br.com.manage.store.application.api.response.SalesCalcResponse;
 import br.com.manage.store.application.api.response.SalesResponse;
+import br.com.manage.store.domain.entity.ProductEntity;
 import br.com.manage.store.domain.entity.SalesEntity;
 import br.com.manage.store.domain.mapper.GenericMapper;
 import br.com.manage.store.domain.service.ISalesService;
+import br.com.manage.store.infrastructure.component.ProductExists;
 import br.com.manage.store.infrastructure.handler.exceptions.NotFoundException;
 import br.com.manage.store.infrastructure.repository.CustomerRepository;
 import br.com.manage.store.infrastructure.repository.SalesProductRepository;
@@ -18,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.stream.Collectors;
 
 import static br.com.manage.store.infrastructure.util.VerifyNotNullUtils.notNull;
@@ -30,6 +32,7 @@ public class SalesService implements ISalesService {
     private final SalesRepository salesRepository;
     private final SalesProductRepository salesProductRepository;
     private final CustomerRepository customerRepository;
+    private final ProductExists productExists;
     private GenericMapper mapper;
 
     @Transactional
@@ -71,9 +74,37 @@ public class SalesService implements ISalesService {
 
     @Override
     public SalesCalcResponse salesCalc(SalesCalcRequest request) {
-        var listprice = request.getSalesProductRequests().stream().map(price -> price.getPrice()).collect(Collectors.toList());
-        BigDecimal priceTotal = listprice.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
-        BigDecimal priceDiscount = priceTotal.multiply(BigDecimal.valueOf(request.getDiscount() / 100));
-        return new SalesCalcResponse(request.getSalesProductRequests().size(), request.getDiscount(), priceDiscount.setScale(2, RoundingMode.HALF_UP), priceTotal.subtract(priceDiscount).setScale(2, RoundingMode.HALF_UP));
+
+//        Verifica se o produto existe na base de dados atravez do codigo. Quando for localizado, ele vai atribuir um
+//        key e o value em um map. Tambem sera feito a verificacao se a quantidade solicitada tem em estoque
+        var productEntityMap = request.getSalesProductRequests().stream().map(ref -> {
+            var entity = productExists.getProductExistsCode(ref.getCode());
+            if (ref.getAmount() > entity.getAmount()) {
+                throw new NullPointerException("Quantidade insuficiente!");
+            }
+            return entity;
+        }).collect(Collectors.toMap(ProductEntity::getCode, ref -> ref));
+
+//        Soma a  quantidade de itens solicitados
+        var amount = request.getSalesProductRequests().stream().map(ref -> productEntityMap.get(ref.getCode())).mapToInt(ref -> ref.getAmount()).sum();
+
+//        Soma o preço total dos itens
+        var price = request.getSalesProductRequests().stream().map(ref -> productEntityMap.get(ref.getCode()).getPrice().multiply(BigDecimal.valueOf(ref.getAmount()))).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+//        Soma o preço ja com os descontos atribuidos nos itens
+//        var priceWithDiscount = request.getSalesProductRequests().stream().map(ref -> productEntityMap.get(ref.getCode()).getPriceWithDiscount().multiply(BigDecimal.valueOf(ref.getAmount()))).reduce(BigDecimal.ZERO, BigDecimal::add);
+        var priceWithDiscount = request.getSalesProductRequests().stream().map(ref -> {
+            var t = productEntityMap.get(ref.getCode());
+            var d = t.getDiscountPercentage();
+            var r = request.getDiscount();
+            if (d == 0){
+                var a = BigDecimal.valueOf(request.getDiscount()).divide(BigDecimal.valueOf(100));
+                return t.getPrice().subtract(a.multiply(t.getPrice())).multiply(BigDecimal.valueOf(ref.getAmount()));
+            }
+
+            return t.getPriceWithDiscount().multiply(BigDecimal.valueOf(ref.getAmount()));
+        }).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        return new SalesCalcResponse(amount, null, priceWithDiscount, price, mapper.mapAll(productEntityMap.values().stream().toList(), ProductResponse.class));
     }
 }

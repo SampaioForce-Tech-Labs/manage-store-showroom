@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -14,4 +15,5 @@ public class SalesCalcResponse {
     private Double discount;
     private BigDecimal valueTotalDiscount;
     private BigDecimal totalPayable;
+    private List<ProductResponse> productResponses;
 }

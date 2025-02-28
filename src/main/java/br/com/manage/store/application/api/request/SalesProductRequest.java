@@ -12,7 +12,4 @@ import java.math.BigDecimal;
 public class SalesProductRequest {
     private String code;
     private int amount;
-    private Double discount;
-    private BigDecimal price;
-    private BigDecimal priceWithDiscount;
 }
