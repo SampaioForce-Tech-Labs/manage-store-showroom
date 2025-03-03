@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static br.com.manage.store.infrastructure.util.CalcDiscountUtil.discount;
+import static br.com.manage.store.infrastructure.util.CalcPriceUtil.discount;
 import static br.com.manage.store.infrastructure.util.ComparePriceUtils.checkPrice;
 import static br.com.manage.store.infrastructure.util.EnumCheckerUtils.isValidEnum;
 import static br.com.manage.store.infrastructure.util.VerifyNotNullUtils.notNull;

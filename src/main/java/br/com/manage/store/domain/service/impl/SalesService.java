@@ -5,7 +5,6 @@ import br.com.manage.store.application.api.request.SalesRequest;
 import br.com.manage.store.application.api.response.ProductResponse;
 import br.com.manage.store.application.api.response.SalesCalcResponse;
 import br.com.manage.store.application.api.response.SalesResponse;
-import br.com.manage.store.domain.entity.ProductEntity;
 import br.com.manage.store.domain.entity.SalesEntity;
 import br.com.manage.store.domain.mapper.GenericMapper;
 import br.com.manage.store.domain.service.ISalesService;
@@ -14,6 +13,7 @@ import br.com.manage.store.infrastructure.handler.exceptions.NotFoundException;
 import br.com.manage.store.infrastructure.repository.CustomerRepository;
 import br.com.manage.store.infrastructure.repository.SalesProductRepository;
 import br.com.manage.store.infrastructure.repository.SalesRepository;
+import br.com.manage.store.infrastructure.util.CalcPriceUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.stream.Collectors;
+import java.math.RoundingMode;
 
 import static br.com.manage.store.infrastructure.util.VerifyNotNullUtils.notNull;
 
@@ -75,36 +75,11 @@ public class SalesService implements ISalesService {
     @Override
     public SalesCalcResponse salesCalc(SalesCalcRequest request) {
 
-//        Verifica se o produto existe na base de dados atravez do codigo. Quando for localizado, ele vai atribuir um
-//        key e o value em um map. Tambem sera feito a verificacao se a quantidade solicitada tem em estoque
-        var productEntityMap = request.getSalesProductRequests().stream().map(ref -> {
-            var entity = productExists.getProductExistsCode(ref.getCode());
-            if (ref.getAmount() > entity.getAmount()) {
-                throw new NullPointerException("Quantidade insuficiente!");
-            }
-            return entity;
-        }).collect(Collectors.toMap(ProductEntity::getCode, ref -> ref));
+        var productEntityMap = productExists.verifyProductAndMap(request.getSalesProductRequest());
 
-//        Soma a  quantidade de itens solicitados
-        var amount = request.getSalesProductRequests().stream().map(ref -> productEntityMap.get(ref.getCode())).mapToInt(ref -> ref.getAmount()).sum();
-
-//        Soma o preço total dos itens
-        var price = request.getSalesProductRequests().stream().map(ref -> productEntityMap.get(ref.getCode()).getPrice().multiply(BigDecimal.valueOf(ref.getAmount()))).reduce(BigDecimal.ZERO, BigDecimal::add);
-
-//        Soma o preço ja com os descontos atribuidos nos itens
-//        var priceWithDiscount = request.getSalesProductRequests().stream().map(ref -> productEntityMap.get(ref.getCode()).getPriceWithDiscount().multiply(BigDecimal.valueOf(ref.getAmount()))).reduce(BigDecimal.ZERO, BigDecimal::add);
-        var priceWithDiscount = request.getSalesProductRequests().stream().map(ref -> {
-            var t = productEntityMap.get(ref.getCode());
-            var d = t.getDiscountPercentage();
-            var r = request.getDiscount();
-            if (d == 0){
-                var a = BigDecimal.valueOf(request.getDiscount()).divide(BigDecimal.valueOf(100));
-                return t.getPrice().subtract(a.multiply(t.getPrice())).multiply(BigDecimal.valueOf(ref.getAmount()));
-            }
-
-            return t.getPriceWithDiscount().multiply(BigDecimal.valueOf(ref.getAmount()));
-        }).reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        return new SalesCalcResponse(amount, null, priceWithDiscount, price, mapper.mapAll(productEntityMap.values().stream().toList(), ProductResponse.class));
+        var price = request.getSalesProductRequest().stream().map(ref -> productEntityMap.get(ref.getCode()).getPrice().multiply(BigDecimal.valueOf(ref.getAmount()))).reduce(BigDecimal.ZERO, BigDecimal::add).setScale(2, RoundingMode.DOWN);
+        var priceWithDiscount = CalcPriceUtil.discountAdditional(request, productEntityMap);
+        var totalDiscount = price.subtract(priceWithDiscount).setScale(2, RoundingMode.DOWN);
+        return new SalesCalcResponse(request.getSalesProductRequest().stream().mapToInt(ref -> ref.getAmount()).sum(), request.getDiscount(), priceWithDiscount, price, totalDiscount, mapper.mapAll(productEntityMap.values().stream().toList(), ProductResponse.class));
     }
 }

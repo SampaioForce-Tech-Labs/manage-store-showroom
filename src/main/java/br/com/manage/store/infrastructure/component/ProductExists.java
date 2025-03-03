@@ -1,12 +1,17 @@
 package br.com.manage.store.infrastructure.component;
 
 import br.com.manage.store.application.api.request.ProductRequest;
+import br.com.manage.store.application.api.request.SalesProductRequest;
 import br.com.manage.store.domain.entity.ProductEntity;
 import br.com.manage.store.infrastructure.handler.exceptions.ConflictException;
 import br.com.manage.store.infrastructure.handler.exceptions.NotFoundException;
 import br.com.manage.store.infrastructure.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 @AllArgsConstructor
@@ -40,5 +45,15 @@ public class ProductExists {
                 throw new ConflictException("Código: " + request.getCode());
             }
         }
+    }
+
+    public Map<String, ProductEntity> verifyProductAndMap(List<SalesProductRequest> request) {
+        return request.stream().map(ref -> {
+            var entity = productRepository.findByCode(ref.getCode()).orElseThrow(() -> new NotFoundException("Código" + ref.getCode()));
+            if (ref.getAmount() > entity.getAmount()) {
+                throw new NullPointerException("Quantidade insuficiente!");
+            }
+            return entity;
+        }).collect(Collectors.toMap(ProductEntity::getCode, entity -> entity));
     }
 }

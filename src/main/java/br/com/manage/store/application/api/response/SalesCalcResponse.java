@@ -13,7 +13,8 @@ import java.util.List;
 public class SalesCalcResponse {
     private int totalItems;
     private Double discount;
-    private BigDecimal valueTotalDiscount;
-    private BigDecimal totalPayable;
+    private BigDecimal priceWithDiscount;
+    private BigDecimal priceTotal;
+    private BigDecimal totalDiscount;
     private List<ProductResponse> productResponses;
 }
