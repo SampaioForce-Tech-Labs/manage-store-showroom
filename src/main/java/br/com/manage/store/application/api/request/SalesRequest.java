@@ -12,10 +12,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SalesRequest {
+    private String customerCpf;
+    private BigDecimal discountPercentage;
+    private List<SalesProductRequest> products = new ArrayList<>();
     private int totalItems;
-    private BigDecimal discountTotalSum;
-    private BigDecimal totalSum;
-    private BigDecimal totalWithDiscount;
-    private String customer;
-    private List<SalesProductRequest> salesProductEntities = new ArrayList<>();
+    private  BigDecimal priceWithDiscount;
+    private BigDecimal totalPrice;
 }

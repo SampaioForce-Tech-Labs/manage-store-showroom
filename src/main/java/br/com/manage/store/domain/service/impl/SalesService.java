@@ -1,19 +1,26 @@
 package br.com.manage.store.domain.service.impl;
 
 import br.com.manage.store.application.api.request.SalesCalcRequest;
+import br.com.manage.store.application.api.request.SalesProductRequest;
 import br.com.manage.store.application.api.request.SalesRequest;
 import br.com.manage.store.application.api.response.ProductResponse;
 import br.com.manage.store.application.api.response.SalesCalcResponse;
 import br.com.manage.store.application.api.response.SalesResponse;
+import br.com.manage.store.domain.entity.CustomerEntity;
 import br.com.manage.store.domain.entity.SalesEntity;
+import br.com.manage.store.domain.entity.SalesProductEntity;
+import br.com.manage.store.domain.enums.StatusEnum;
 import br.com.manage.store.domain.mapper.GenericMapper;
 import br.com.manage.store.domain.service.ISalesService;
 import br.com.manage.store.infrastructure.component.ProductExists;
+import br.com.manage.store.infrastructure.handler.exceptions.InsufficientStockException;
 import br.com.manage.store.infrastructure.handler.exceptions.NotFoundException;
 import br.com.manage.store.infrastructure.repository.CustomerRepository;
+import br.com.manage.store.infrastructure.repository.ProductRepository;
 import br.com.manage.store.infrastructure.repository.SalesProductRepository;
 import br.com.manage.store.infrastructure.repository.SalesRepository;
 import br.com.manage.store.infrastructure.util.CalcPriceUtil;
+import br.com.manage.store.infrastructure.util.DecrementSalesProductUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
@@ -22,7 +29,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import static br.com.manage.store.infrastructure.util.DecrementSalesProductUtils.decrementProduct;
 import static br.com.manage.store.infrastructure.util.VerifyNotNullUtils.notNull;
 
 @Service
@@ -30,24 +41,25 @@ import static br.com.manage.store.infrastructure.util.VerifyNotNullUtils.notNull
 public class SalesService implements ISalesService {
 
     private final SalesRepository salesRepository;
-    private final SalesProductRepository salesProductRepository;
     private final CustomerRepository customerRepository;
-    private final ProductExists productExists;
+    private final ProductRepository productRepository;
     private GenericMapper mapper;
 
     @Transactional
     @Override
     public SalesResponse create(SalesRequest request) {
-        notNull(request.getCustomer());
-
-        var entity = mapper.map(request, SalesEntity.class);
-
-        var customer = customerRepository.findByCpf(request.getCustomer()).orElseThrow(() -> new NotFoundException("Cliente: " + request.getCustomer()));
-        entity.setCustomerEntity(customer);
-        entity.getSalesProductEntities().forEach(rest -> rest.setSalesEntity(entity));
-        return null;
-//        return mapper.map(salesRepository.save(entity), SalesResponse.class);
+        decrementProduct(productRepository,request);
+        var sales = mapper.map(request, SalesEntity.class);
+        sales.setCustomerEntity(customerRepository.findByCpf(request.getCustomerCpf()).get());
+        sales.setStatus(StatusEnum.FINALIZADO);
+        var pro = request.getProducts().stream().map(products -> mapper.map(products,SalesProductEntity.class)).collect(Collectors.toList());
+        sales.setProductEntities(pro);
+        //List<SalesProductEntity> pro = mapper.mapAll(request.getProducts(),SalesProductEntity.class);
+        sales.setProductEntities(pro);
+        SalesEntity response = salesRepository.save(sales);
+        return mapper.map(response, SalesResponse.class);
     }
+
 
     @Override
     public SalesResponse findById(Long id) {
@@ -58,13 +70,15 @@ public class SalesService implements ISalesService {
     @Override
     public void delete(Long id) {
         notNull(id);
+        salesRepository.findById(id);
     }
 
     @Transactional
     @Override
     public SalesResponse update(Long id, SalesRequest request) {
         notNull(id, request);
-        return null;
+        SalesEntity salesEntity = mapper.map(request,SalesEntity.class);
+        return mapper.map(salesEntity,SalesResponse.class);
     }
 
     @Override
@@ -74,12 +88,11 @@ public class SalesService implements ISalesService {
 
     @Override
     public SalesCalcResponse salesCalc(SalesCalcRequest request) {
-
-        var productEntityMap = productExists.verifyProductAndMap(request.getSalesProductRequest());
-
-        var price = request.getSalesProductRequest().stream().map(ref -> productEntityMap.get(ref.getCode()).getPrice().multiply(BigDecimal.valueOf(ref.getAmount()))).reduce(BigDecimal.ZERO, BigDecimal::add).setScale(2, RoundingMode.DOWN);
-        var priceWithDiscount = CalcPriceUtil.discountAdditional(request, productEntityMap);
-        var totalDiscount = price.subtract(priceWithDiscount).setScale(2, RoundingMode.DOWN);
-        return new SalesCalcResponse(request.getSalesProductRequest().stream().mapToInt(ref -> ref.getAmount()).sum(), request.getDiscount(), priceWithDiscount, price, totalDiscount, mapper.mapAll(productEntityMap.values().stream().toList(), ProductResponse.class));
+        return null;
     }
+//
+//    @Override
+//    public Page<SalesResponse> findAll(Specification<SalesEntity> specification, int size, int page) {
+//        return null;
+//    }
 }

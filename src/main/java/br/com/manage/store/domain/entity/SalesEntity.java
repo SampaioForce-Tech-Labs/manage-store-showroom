@@ -1,5 +1,7 @@
 package br.com.manage.store.domain.entity;
 
+import br.com.manage.store.domain.enums.StatusEnum;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -19,27 +21,31 @@ public class SalesEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "total_items")
-    private int totalItems;
-
-    @Column(name = "discount_total_sum")
-    private BigDecimal discountTotalSum;
-
-    @Column(name = "total_sum")
-    private BigDecimal totalSum;
-
-    @Column(name = "total_with_discount")
-    private BigDecimal totalWithDiscount;
-
-    @CreationTimestamp
-    @Column(name = "create_at", updatable = false)
-    private LocalDateTime createAt;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sales_customer_id", referencedColumnName = "id")
     private CustomerEntity customerEntity;
 
-    @OneToMany(mappedBy = "salesEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<SalesProductEntity> salesProductEntities = new ArrayList<>();
+    @Enumerated(EnumType.STRING)
+    private StatusEnum status;
+
+    @Column(name = "discount_Percentage")
+    private BigDecimal discountPercentage;
+
+    @OneToMany
+    private List<SalesProductEntity> productEntities = new ArrayList<>();
+
+    @Column(name = "total_Items")
+    private int totalItems;
+
+    @Column(name = "price_With_Discount")
+    private BigDecimal priceWithDiscount;
+
+    @Column(name = "total_Price")
+    private BigDecimal totalPrice;
+
+    @CreationTimestamp
+    @Column(name = "create_at", updatable = false)
+    @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss")
+    private LocalDateTime createAt = LocalDateTime.now();
 
 }

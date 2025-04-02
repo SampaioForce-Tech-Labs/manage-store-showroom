@@ -1,5 +1,7 @@
 package br.com.manage.store.application.api.request;
 
+import br.com.manage.store.domain.entity.SalesEntity;
+import jakarta.persistence.JoinColumn;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -13,9 +15,9 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class SalesProductRequest {
 
-    @Size(message = "{product.size.code}", max = 50)
     private String code;
-
-    @DecimalMin(value = "1", message = "{sales.decimalmin.amount}")
-    private int amount;
+    private String name;
+    private BigDecimal priceUnit;
+    private BigDecimal priceTotal;
+    private int quantityInStock;
 }
