@@ -1,6 +1,5 @@
 package br.com.manage.store.domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,20 +21,20 @@ public class SalesProductEntity {
     @Column(name = "code")
     private String code;
 
-    @Column(name = "amount")
-    private int amount;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "discount")
-    private Double discount;
+    @Column(name = "price_Unit")
+    private BigDecimal priceUnit;
 
-    @Column(name = "price")
-    private BigDecimal price;
+    @Column(name = "price_Total")
+    private BigDecimal priceTotal;
 
-    @Column(name = "price_with_discount")
-    private BigDecimal priceWithDiscount;
+    @Column(name = "quantity_In_Stock")
+    private int quantityInStock;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sales_product_sales_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "sales_product_sales_id", referencedColumnName = "id", nullable = false)
     private SalesEntity salesEntity;
 
 }

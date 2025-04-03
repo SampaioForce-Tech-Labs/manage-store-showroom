@@ -31,7 +31,7 @@ public class SalesEntity {
     @Column(name = "discount_Percentage")
     private BigDecimal discountPercentage;
 
-    @OneToMany
+    @OneToMany(mappedBy = "salesEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SalesProductEntity> productEntities = new ArrayList<>();
 
     @Column(name = "total_Items")

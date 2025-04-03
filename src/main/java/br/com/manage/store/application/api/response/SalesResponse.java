@@ -16,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SalesResponse {
+    private Long id;
     private String customerCpf;
     private StatusEnum status;
     private BigDecimal discountPercentage;

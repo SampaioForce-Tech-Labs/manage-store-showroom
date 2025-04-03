@@ -1,6 +1,6 @@
 CREATE TABLE tb_sales_product(
     id INT AUTO_INCREMENT PRIMARY KEY,
-    code VARCHAR(50) UNIQUE,
+    code VARCHAR(50) NOT NULL,
     name VARCHAR(50) NOT NULL,
     price_Unit DECIMAL(10,2) NOT NULL,
     price_Total DECIMAL(10,2) NOT NULL,
