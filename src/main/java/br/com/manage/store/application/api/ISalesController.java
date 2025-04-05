@@ -1,6 +1,7 @@
 package br.com.manage.store.application.api;
 
 import br.com.manage.store.application.api.filter.ProductFilterTO;
+import br.com.manage.store.application.api.filter.SalesFilterTO;
 import br.com.manage.store.application.api.request.SalesCalcRequest;
 import br.com.manage.store.application.api.request.SalesRequest;
 import br.com.manage.store.application.api.response.SalesCalcResponse;
@@ -28,11 +29,9 @@ public interface ISalesController {
 
     @GetMapping(value = "/find-all", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Page<SalesResponse>> findAll(
-            ProductFilterTO filterTO,
+            SalesFilterTO filterTO,
             @RequestParam(name = "size", defaultValue = "5") int size,
             @RequestParam(name = "page", defaultValue = "0") int page
     );
 
-    @GetMapping(value = "/calc-sales", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<SalesCalcResponse> calcSales(@RequestBody SalesCalcRequest request);
 }

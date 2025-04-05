@@ -1,11 +1,8 @@
 package br.com.manage.store.infrastructure.handler;
 
 import br.com.manage.store.infrastructure.component.MessageService;
-import br.com.manage.store.infrastructure.handler.exceptions.ConflictException;
-import br.com.manage.store.infrastructure.handler.exceptions.IllegalEnumException;
-import br.com.manage.store.infrastructure.handler.exceptions.InvalidArgumentException;
-import br.com.manage.store.infrastructure.handler.exceptions.NotFoundException;
-import jakarta.servlet.http.HttpServletRequest;
+import br.com.manage.store.infrastructure.handler.exceptions.*;
+
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
@@ -58,15 +55,6 @@ public class GlobalExcepetionHandler extends ResponseEntityExceptionHandler {
         return handlerException(exception, HttpStatus.INTERNAL_SERVER_ERROR, request, key, args);
     }
 
-//    @ExceptionHandler(NullPointerException.class)
-//    public ResponseEntity<Object> handleNullPointerException(
-//            NullPointerException exception,
-//            WebRequest request) {
-//        String key = "error.violation.optional";
-//        Object[] args = {exception.getMessage()};
-//        return handlerException(exception, HttpStatus.INTERNAL_SERVER_ERROR, request, key, args);
-//    }
-
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Object> handleDataIntegrityViolationException(
             DataIntegrityViolationException exception,
@@ -74,6 +62,15 @@ public class GlobalExcepetionHandler extends ResponseEntityExceptionHandler {
         String key = "error.violation.optional";
         Object[] args = {exception.getMessage()};
         return handlerException(exception, HttpStatus.INTERNAL_SERVER_ERROR, request, key, args);
+    }
+
+    @ExceptionHandler(PersistenceDataBaseException.class)
+    public ResponseEntity<Object> conflictInternalException(
+            DataIntegrityViolationException exception,
+            WebRequest request) {
+        String key = "error.funcionamento";
+        Object[] args = {exception.getMessage()};
+        return handlerException(exception, HttpStatus.BAD_REQUEST, request, key, args);
     }
 
     @ExceptionHandler(NotFoundException.class)
@@ -98,7 +95,7 @@ public class GlobalExcepetionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleConflictException(
             ConflictException exception,
             WebRequest request,
-            HttpServletRequest http) {
+            HttpStatusCode http) {
         String key = "error.conflict.value";
         Object[] args = {exception.getMessage()};
         return handlerException(exception, HttpStatus.BAD_REQUEST, request, key, args);

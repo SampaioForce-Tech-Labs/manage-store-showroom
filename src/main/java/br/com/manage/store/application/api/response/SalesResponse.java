@@ -1,6 +1,5 @@
 package br.com.manage.store.application.api.response;
 
-import br.com.manage.store.application.api.request.SalesProductRequest;
 import br.com.manage.store.domain.enums.StatusEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -20,7 +19,7 @@ public class SalesResponse {
     private String customerCpf;
     private StatusEnum status;
     private BigDecimal discountPercentage;
-    private List<SalesProductRequest> products = new ArrayList<>();
+    private List<SalesProductResponse> products = new ArrayList<>();
     private int totalItems;
     private  BigDecimal priceWithDiscount;
     private BigDecimal totalPrice;

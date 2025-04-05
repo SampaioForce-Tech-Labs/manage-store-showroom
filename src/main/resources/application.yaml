@@ -1,7 +1,7 @@
 server:
   servlet:
     context-path: /manage_store/v1
-  port: 8080
+  port: 8090
 
 spring:
   application:

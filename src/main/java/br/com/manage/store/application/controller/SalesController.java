@@ -2,13 +2,18 @@ package br.com.manage.store.application.controller;
 
 import br.com.manage.store.application.api.ISalesController;
 import br.com.manage.store.application.api.filter.ProductFilterTO;
+import br.com.manage.store.application.api.filter.SalesFilterTO;
 import br.com.manage.store.application.api.request.SalesCalcRequest;
 import br.com.manage.store.application.api.request.SalesRequest;
 import br.com.manage.store.application.api.response.SalesCalcResponse;
 import br.com.manage.store.application.api.response.SalesResponse;
+import br.com.manage.store.domain.entity.ProductEntity;
+import br.com.manage.store.domain.entity.SalesEntity;
 import br.com.manage.store.domain.service.ISalesService;
+import br.com.manage.store.infrastructure.component.specification.SpecificationFactory;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SalesController implements ISalesController {
 
     private final ISalesService iSalesService;
+    private final SpecificationFactory<SalesEntity> specificationFactory;
 
     @Override
     public ResponseEntity<SalesResponse> create(SalesRequest request) {
@@ -31,21 +37,19 @@ public class SalesController implements ISalesController {
 
     @Override
     public ResponseEntity<Void> delete(Long id) {
-        return null;
+        iSalesService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
     @Override
     public ResponseEntity<SalesResponse> update(Long id, SalesRequest request) {
-        return null;
+        return ResponseEntity.status(HttpStatus.OK).body(iSalesService.update(id, request));
     }
 
     @Override
-    public ResponseEntity<Page<SalesResponse>> findAll(ProductFilterTO filterTO, int size, int page) {
-        return null;
+    public ResponseEntity<Page<SalesResponse>> findAll(SalesFilterTO filterTO, int size, int page) {
+        Specification<SalesEntity> specification = specificationFactory.create(filterTO);
+        return ResponseEntity.status(HttpStatus.OK).body(iSalesService.findAll(specification,size,page));
     }
 
-    @Override
-    public ResponseEntity<SalesCalcResponse> calcSales(SalesCalcRequest request) {
-        return ResponseEntity.status(HttpStatus.OK).body(iSalesService.salesCalc(request));
-    }
 }

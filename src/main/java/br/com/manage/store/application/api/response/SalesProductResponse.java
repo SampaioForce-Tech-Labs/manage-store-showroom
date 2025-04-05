@@ -1,7 +1,5 @@
 package br.com.manage.store.application.api.response;
 
-import br.com.manage.store.domain.entity.SalesEntity;
-import jakarta.persistence.JoinColumn;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

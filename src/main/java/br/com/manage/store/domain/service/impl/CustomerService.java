@@ -7,6 +7,7 @@ import br.com.manage.store.domain.entity.ReferencePersonEntity;
 import br.com.manage.store.domain.mapper.GenericMapper;
 import br.com.manage.store.domain.service.ICustomerService;
 import br.com.manage.store.infrastructure.component.CustomerExists;
+import br.com.manage.store.infrastructure.handler.exceptions.PersistenceDataBaseException;
 import br.com.manage.store.infrastructure.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.*;
@@ -18,6 +19,7 @@ import static br.com.manage.store.infrastructure.util.VerifyNotNullUtils.notNull
 
 @Service
 @AllArgsConstructor
+@Transactional(rollbackFor = PersistenceDataBaseException.class)
 public class CustomerService implements ICustomerService {
 
     private final CustomerRepository customerRepository;
@@ -50,7 +52,7 @@ public class CustomerService implements ICustomerService {
         customerRepository.deleteById(id);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = PersistenceDataBaseException.class)
     @Override
     public CustomerResponse update(Long id, CustomerRequest request) {
         notNull(id, request);

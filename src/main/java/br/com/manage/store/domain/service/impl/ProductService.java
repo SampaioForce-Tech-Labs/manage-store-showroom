@@ -9,6 +9,7 @@ import br.com.manage.store.domain.enums.category.CategoryEnum;
 import br.com.manage.store.domain.mapper.GenericMapper;
 import br.com.manage.store.domain.service.IProductService;
 import br.com.manage.store.infrastructure.component.ProductExists;
+import br.com.manage.store.infrastructure.handler.exceptions.PersistenceDataBaseException;
 import br.com.manage.store.infrastructure.handler.exceptions.NotFoundException;
 import br.com.manage.store.infrastructure.repository.ProductRepository;
 import lombok.AllArgsConstructor;
@@ -36,7 +37,7 @@ public class ProductService implements IProductService {
     private final GenericMapper mapper;
     private final ProductExists productExists;
 
-    @Transactional
+    @Transactional(rollbackFor = PersistenceDataBaseException.class)
     @Override
     public ProductResponse create(ProductRequest request) {
         notNull(request);
@@ -63,6 +64,7 @@ public class ProductService implements IProductService {
         productRepository.deleteById(id);
     }
 
+    @Transactional(rollbackFor = PersistenceDataBaseException.class)
     @Override
     public ProductResponse update(Long id, ProductRequest request) {
         notNull(id, request);
