@@ -37,8 +37,8 @@ public class ProductEntity {
     @Column(name = "price")
     private BigDecimal price;
 
-    @Column(name = "amount")
-    private int amount;
+    @Column(name = "quantity_in_stock")
+    private int quantityInStock;
 
     @Column(name = "size_item")
     private String size;

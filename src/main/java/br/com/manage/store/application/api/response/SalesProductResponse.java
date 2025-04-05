@@ -16,5 +16,5 @@ public class SalesProductResponse {
     private String name;
     private BigDecimal priceUnit;
     private BigDecimal priceTotal;
-    private int quantityInStock;
+    private int amount;
 }

@@ -24,9 +24,9 @@ public class CalcPriceUtil {
             var productEntity = productEntityMap.get(ref.getCode());
             var percentageDiscount = productEntity.getDiscountPercentage();
             if (percentageDiscount == 0) {
-                return discount(request.getDiscount(), productEntity.getPrice()).multiply(BigDecimal.valueOf(ref.getQuantityInStock())).setScale(2, RoundingMode.DOWN);
+                return discount(request.getDiscount(), productEntity.getPrice()).multiply(BigDecimal.valueOf(ref.getAmount())).setScale(2, RoundingMode.DOWN);
             }
-            return productEntity.getPriceWithDiscount().multiply(BigDecimal.valueOf(ref.getQuantityInStock()));
+            return productEntity.getPriceWithDiscount().multiply(BigDecimal.valueOf(ref.getAmount()));
         }).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

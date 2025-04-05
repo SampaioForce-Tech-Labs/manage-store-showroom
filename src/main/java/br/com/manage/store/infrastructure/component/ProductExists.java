@@ -50,7 +50,7 @@ public class ProductExists {
     public Map<String, ProductEntity> verifyProductAndMap(List<SalesProductRequest> request) {
         return request.stream().map(ref -> {
             var entity = productRepository.findByCode(ref.getCode()).orElseThrow(() -> new NotFoundException("Código" + ref.getCode()));
-            if (ref.getQuantityInStock() > entity.getAmount()) {
+            if (ref.getAmount() > entity.getQuantityInStock()) {
                 throw new NullPointerException("Quantidade insuficiente!");
             }
             return entity;

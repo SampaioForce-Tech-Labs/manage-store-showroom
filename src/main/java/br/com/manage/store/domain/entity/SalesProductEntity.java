@@ -24,14 +24,14 @@ public class SalesProductEntity {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "price_Unit")
+    @Column(name = "price_unit")
     private BigDecimal priceUnit;
 
-    @Column(name = "price_Total")
+    @Column(name = "price_total")
     private BigDecimal priceTotal;
 
-    @Column(name = "quantity_In_Stock")
-    private int quantityInStock;
+    @Column(name = "amount")
+    private int amount;
 
     @ManyToOne
     @JoinColumn(name = "sales_product_sales_id", referencedColumnName = "id", nullable = false)

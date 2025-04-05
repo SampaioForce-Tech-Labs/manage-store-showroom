@@ -12,10 +12,10 @@ public class DecrementSalesProductUtils {
     public static void  decrementProduct(ProductRepository productRepository,SalesRequest request){
         var products = request.getProducts().stream().map(productsL ->{
             var producEntity = productRepository.findByCode(productsL.getCode()).get();
-            if (productsL.getQuantityInStock() > producEntity.getAmount()){
+            if (productsL.getAmount() > producEntity.getQuantityInStock()){
                 throw new InsufficientStockException();
             }
-            producEntity.setAmount(producEntity.getAmount() - productsL.getQuantityInStock());
+            producEntity.setQuantityInStock(producEntity.getQuantityInStock() - productsL.getAmount());
             return producEntity;
         }).collect(Collectors.toList());
         productRepository.saveAll(products);

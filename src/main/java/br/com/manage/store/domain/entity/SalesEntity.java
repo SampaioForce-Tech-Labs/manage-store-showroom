@@ -28,19 +28,19 @@ public class SalesEntity {
     @Enumerated(EnumType.STRING)
     private StatusEnum status;
 
-    @Column(name = "discount_Percentage")
+    @Column(name = "discount_percentage")
     private BigDecimal discountPercentage;
 
     @OneToMany(mappedBy = "salesEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<SalesProductEntity> productEntities = new ArrayList<>();
 
-    @Column(name = "total_Items")
+    @Column(name = "total_items")
     private int totalItems;
 
-    @Column(name = "price_With_Discount")
+    @Column(name = "price_with_discount")
     private BigDecimal priceWithDiscount;
 
-    @Column(name = "total_Price")
+    @Column(name = "total_price")
     private BigDecimal totalPrice;
 
     @CreationTimestamp

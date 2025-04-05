@@ -27,8 +27,8 @@ public class ProductRequest {
     @DecimalMin(value = "0.0", message = "{product.decimalmin.price}")
     private BigDecimal price;
 
-    @NotNull(message = "{product.notnull.amount}")
-    private Integer amount;
+    @NotNull(message = "{product.notnull.quantityInStock}")
+    private Integer quantityInStock;
 
     @Size(message = "{product.size.size_item}", max = 60)
     private String size;
