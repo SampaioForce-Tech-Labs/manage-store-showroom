@@ -8,7 +8,7 @@ CREATE TABLE tb_reference_person(
     references_point VARCHAR(60),
     complement VARCHAR(20),
     city VARCHAR(20),
-    state VARCHAR(2),
+    state VARCHAR(20),
     reference_person_customer_id INT NOT NULL,
     FOREIGN KEY (reference_person_customer_id) REFERENCES tb_customer(id) ON DELETE CASCADE ON UPDATE CASCADE
 )

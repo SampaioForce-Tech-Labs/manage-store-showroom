@@ -32,6 +32,8 @@ management:
     web:
       exposure:
         include: "*"
+    shutdown:
+      enabled: false
 #logging:
 #  file:
 #    name: logs/application.log
