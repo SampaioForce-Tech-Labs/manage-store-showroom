@@ -18,12 +18,12 @@ import java.util.List;
 @NoArgsConstructor
 public class SalesRequest {
 
-    @CPF(message = "{sales.cpf.customerCpf}")
+//    @CPF(message = "{sales.cpf.customerCpf}")
     private String customerCpf;
 
     @DecimalMin(value = "0.0", message = "{sales.decimalmin.discountPercentage}")
     @DecimalMax(value = "100.0", message = "{sales.decimalmax.discountPercentage}")
-    @NotBlank(message = "{sales.notblank.discountPercentage}")
+//    @NotBlank(message = "{sales.notblank.discountPercentage}")
     private BigDecimal discountPercentage;
 
     @DecimalMin(value = "0", message = "{sales.decimalmin.totalItems}")
@@ -34,7 +34,7 @@ public class SalesRequest {
     private BigDecimal priceWithDiscount;
 
     @DecimalMin(value = "0.0", message = "{sales.decimalmin.totalPrice}")
-    @NotNull(message = "{sales.notnull.totalPrice}")
+//    @NotNull(message = "{sales.notnull.totalPrice}")
     private BigDecimal totalPrice;
 
     private List<SalesProductRequest> products = new ArrayList<>();

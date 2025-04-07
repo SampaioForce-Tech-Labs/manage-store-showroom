@@ -13,6 +13,7 @@ import br.com.manage.store.infrastructure.handler.exceptions.PersistenceDataBase
 import br.com.manage.store.infrastructure.repository.CustomerRepository;
 import br.com.manage.store.infrastructure.repository.ProductRepository;
 import br.com.manage.store.infrastructure.repository.SalesRepository;
+import br.com.manage.store.infrastructure.util.ConvertReplaceAllUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;

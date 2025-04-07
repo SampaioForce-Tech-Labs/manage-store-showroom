@@ -79,6 +79,13 @@ public class GlobalExcepetionHandler extends ResponseEntityExceptionHandler {
         return handlerException(exception, HttpStatus.BAD_REQUEST, request, key, args);
     }
 
+    @ExceptionHandler(InsufficientStockException.class)
+    public ResponseEntity<Object> handlerInsufficientStockException(InsufficientStockException exception, WebRequest request){
+        String key = "error.insufficientstock.value";
+        Object[] args = {exception.getMessage()};
+        return handlerException(exception, HttpStatus.INTERNAL_SERVER_ERROR, request, key, args);
+    }
+
     protected ResponseEntity<Object> handlerException(Exception exception, HttpStatus status, WebRequest request, String key, Object[] args) {
         ApiError<List<String>> response = new ApiError<>(List.of((messageService.getMessage(key, args) + " :: " + exception.getMessage())));
         response.setStatusCode(status.value());
