@@ -21,35 +21,35 @@ public class ProductExists {
 
     public void verifyConflictProduct(String code) {
         if (code != null && productRepository.existsByCode(code)) {
-            throw new ConflictException("Código: " + code);
+            throw new ConflictException(code);
         }
     }
 
     public void verifyExistsIdProduct(Long id) {
         if (!productRepository.existsById(id)) {
-            throw new NotFoundException("Id: " + id);
+            throw new NotFoundException(id.toString());
         }
     }
 
     public ProductEntity getProductExists(Long id) {
-        return productRepository.findById(id).orElseThrow(() -> new NotFoundException("ID: " + id));
+        return productRepository.findById(id).orElseThrow(() -> new NotFoundException(id.toString()));
     }
 
     public ProductEntity getProductExistsCode(String code) {
-        return productRepository.findByCode(code).orElseThrow(() -> new NotFoundException("Código: " + code));
+        return productRepository.findByCode(code).orElseThrow(() -> new NotFoundException(code));
     }
 
     public void verifyConflictEntityAndRequestCode(ProductEntity product, ProductRequest request) {
         if (!product.getCode().equals(request.getCode())) {
             if (productRepository.existsByCode(request.getCode())) {
-                throw new ConflictException("Código: " + request.getCode());
+                throw new ConflictException(request.getCode());
             }
         }
     }
 
     public Map<String, ProductEntity> verifyProductAndMap(List<SalesProductRequest> request) {
         return request.stream().map(ref -> {
-            var entity = productRepository.findByCode(ref.getCode()).orElseThrow(() -> new NotFoundException("Código" + ref.getCode()));
+            var entity = productRepository.findByCode(ref.getCode()).orElseThrow(() -> new NotFoundException(ref.getCode()));
             if (ref.getAmount() > entity.getQuantityInStock()) {
                 throw new NullPointerException("Quantidade insuficiente!");
             }

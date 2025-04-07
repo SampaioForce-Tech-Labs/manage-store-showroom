@@ -11,7 +11,7 @@ public class ComparePriceUtils {
 
     public static void checkPrice(BigDecimal price) {
         if (price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new InvalidArgumentException("PREÇO R$ " + price);
+            throw new InvalidArgumentException("R$ " + price);
         }
     }
 }

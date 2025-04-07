@@ -1,7 +1,7 @@
 server:
   servlet:
     context-path: /manage_store/v1
-  port: 8090
+  port: 8080
 
 spring:
   application:
@@ -25,3 +25,21 @@ spring:
     locations: classpath:db/migration
 cors:
   allowedorigins: ${CORS_ALLONEORIGINS}
+
+# Habilita todos os endpoints do Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+#logging:
+#  file:
+#    name: logs/application.log
+#  level:
+#    root: error
+logging:
+  level:
+    br:
+      com:
+        manage:
+          store=ERROR:

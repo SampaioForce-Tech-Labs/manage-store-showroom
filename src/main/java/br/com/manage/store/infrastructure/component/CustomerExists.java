@@ -17,35 +17,35 @@ public class CustomerExists {
 
     public void verifyExistsCustomer(Object source) {
         if (source instanceof Long && !customerRepository.existsById((Long) source)) {
-            throw new NotFoundException("ID: " + source.toString());
+            throw new NotFoundException(source.toString());
         } else if (source instanceof String && customerRepository.existsByCpf((String) source)) {
-            throw new ConflictException("CPF: " + source.toString());
+            throw new ConflictException(source.toString());
         }
     }
 
     public void verifyConflictCustomer(CustomerEntity entity, CustomerRequest request) {
         if (StringUtils.hasText(request.getCpf())) {
             if (!entity.getCpf().equals(request.getCpf()) && customerRepository.existsByCpf(request.getCpf())) {
-                throw new ConflictException("CPF: " + request.getCpf());
+                throw new ConflictException(request.getCpf());
             }
         }
         if (StringUtils.hasText(request.getEmail())) {
             if (!entity.getEmail().equals(request.getEmail()) && customerRepository.existsByEmail(request.getEmail())) {
-                throw new ConflictException("EMAIL: " + request.getEmail());
+                throw new ConflictException(request.getEmail());
             }
         }
     }
 
     public void verifyConflictEmailOrCpf(String email, String cpf) {
         if (email != null && customerRepository.existsByEmail(email)) {
-            throw new ConflictException("EMAIL: " + email);
+            throw new ConflictException(email);
         }
         if (cpf != null && customerRepository.existsByCpf(cpf)) {
-            throw new ConflictException("CPF: " + cpf);
+            throw new ConflictException(cpf);
         }
     }
 
     public CustomerEntity getEntityExistsIdCustomer(Long source) {
-        return customerRepository.findById(source).orElseThrow(() -> new NotFoundException("ID: " + source.toString()));
+        return customerRepository.findById(source).orElseThrow(() -> new NotFoundException(source.toString()));
     }
 }

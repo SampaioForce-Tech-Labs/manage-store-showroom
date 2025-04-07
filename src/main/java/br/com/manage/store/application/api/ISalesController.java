@@ -1,10 +1,7 @@
 package br.com.manage.store.application.api;
 
-import br.com.manage.store.application.api.filter.ProductFilterTO;
 import br.com.manage.store.application.api.filter.SalesFilterTO;
-import br.com.manage.store.application.api.request.SalesCalcRequest;
 import br.com.manage.store.application.api.request.SalesRequest;
-import br.com.manage.store.application.api.response.SalesCalcResponse;
 import br.com.manage.store.application.api.response.SalesResponse;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;

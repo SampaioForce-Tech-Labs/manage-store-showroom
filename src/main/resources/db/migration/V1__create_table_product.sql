@@ -5,7 +5,7 @@ CREATE TABLE tb_product(
     price DECIMAL(10,2) NOT NULL,
     price_with_discount DECIMAL(10,2),
     discount_percentage DECIMAL(10,2),
-    amount INT NOT NULL,
+    quantity_in_stock INT NOT NULL,
     size_item VARCHAR(60),
     category VARCHAR(20) NOT NULL,
     subcategory VARCHAR(20) NOT NULL,

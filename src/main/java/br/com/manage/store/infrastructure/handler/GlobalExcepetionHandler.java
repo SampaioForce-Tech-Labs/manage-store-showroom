@@ -2,7 +2,6 @@ package br.com.manage.store.infrastructure.handler;
 
 import br.com.manage.store.infrastructure.component.MessageService;
 import br.com.manage.store.infrastructure.handler.exceptions.*;
-
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
@@ -13,8 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -22,7 +21,7 @@ import java.util.List;
 
 
 @Slf4j
-@ControllerAdvice
+@RestControllerAdvice
 @AllArgsConstructor
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class GlobalExcepetionHandler extends ResponseEntityExceptionHandler {
@@ -30,16 +29,8 @@ public class GlobalExcepetionHandler extends ResponseEntityExceptionHandler {
     private final MessageService messageService;
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException exception,
-            HttpHeaders headers,
-            HttpStatusCode status,
-            WebRequest request) {
-        List<String> errors = exception.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .map(error -> error.getField() + ": " + error.getDefaultMessage())
-                .toList();
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        List<String> errors = exception.getBindingResult().getFieldErrors().stream().map(error -> error.getField() + ": " + error.getDefaultMessage()).toList();
         ApiError<List<String>> response = new ApiError<>(errors);
         response.setStatusCode(status.value());
         response.setPath(request.getDescription(false));
@@ -47,55 +38,42 @@ public class GlobalExcepetionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(IllegalEnumException.class)
-    public ResponseEntity<Object> handleIllegalEnumException(
-            IllegalEnumException exception,
-            WebRequest request) {
+    public ResponseEntity<Object> handleIllegalEnumException(IllegalEnumException exception, WebRequest request) {
         String key = "error.enum.invalid";
         Object[] args = {exception.getMessage()};
         return handlerException(exception, HttpStatus.INTERNAL_SERVER_ERROR, request, key, args);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<Object> handleDataIntegrityViolationException(
-            DataIntegrityViolationException exception,
-            WebRequest request) {
+    public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException exception, WebRequest request) {
         String key = "error.violation.optional";
         Object[] args = {exception.getMessage()};
         return handlerException(exception, HttpStatus.INTERNAL_SERVER_ERROR, request, key, args);
     }
 
     @ExceptionHandler(PersistenceDataBaseException.class)
-    public ResponseEntity<Object> conflictInternalException(
-            DataIntegrityViolationException exception,
-            WebRequest request) {
+    public ResponseEntity<Object> conflictInternalException(DataIntegrityViolationException exception, WebRequest request) {
         String key = "error.funcionamento";
         Object[] args = {exception.getMessage()};
         return handlerException(exception, HttpStatus.BAD_REQUEST, request, key, args);
     }
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<Object> handleNotFoundException(
-            NotFoundException exception,
-            WebRequest request) {
+    public ResponseEntity<Object> handleNotFoundException(NotFoundException exception, WebRequest request) {
         String key = "error.notfound.argument";
         Object[] args = {exception.getMessage()};
         return handlerException(exception, HttpStatus.NOT_FOUND, request, key, args);
     }
 
     @ExceptionHandler(InvalidArgumentException.class)
-    public ResponseEntity<Object> handleInvalidArgumentException(
-            InvalidArgumentException exception,
-            WebRequest request) {
+    public ResponseEntity<Object> handleInvalidArgumentException(InvalidArgumentException exception, WebRequest request) {
         String key = "error.invalid.argument";
         Object[] args = {exception.getMessage()};
         return handlerException(exception, HttpStatus.BAD_REQUEST, request, key, args);
     }
 
     @ExceptionHandler(ConflictException.class)
-    public ResponseEntity<Object> handleConflictException(
-            ConflictException exception,
-            WebRequest request,
-            HttpStatusCode http) {
+    public ResponseEntity<Object> handleConflictException(ConflictException exception, WebRequest request) {
         String key = "error.conflict.value";
         Object[] args = {exception.getMessage()};
         return handlerException(exception, HttpStatus.BAD_REQUEST, request, key, args);
