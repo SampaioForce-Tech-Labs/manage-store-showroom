@@ -19,13 +19,12 @@ import static br.com.manage.store.infrastructure.util.VerifyNotNullUtils.notNull
 
 @Service
 @AllArgsConstructor
-@Transactional(rollbackFor = PersistenceDataBaseException.class)
 public class CustomerService implements ICustomerService {
 
     private final CustomerRepository customerRepository;
     private final GenericMapper mapper;
 
-    @Transactional
+    @Transactional(rollbackFor = PersistenceDataBaseException.class)
     @Override
     public CustomerResponse create(CustomerRequest request) {
         notNull(request);
@@ -42,8 +41,7 @@ public class CustomerService implements ICustomerService {
         notNull(id);
         return mapper.map(getEntityExistsIdCustomer(customerRepository, id), CustomerResponse.class);
     }
-
-    @Transactional
+    
     @Override
     public void delete(Long id) {
         notNull(id);
