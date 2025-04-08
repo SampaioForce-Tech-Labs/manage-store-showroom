@@ -1,4 +1,4 @@
-package br.com.manage.store.infrastructure.component;
+package br.com.manage.store.infrastructure.util;
 
 import br.com.manage.store.application.api.request.ProductRequest;
 import br.com.manage.store.application.api.request.SalesProductRequest;
@@ -7,39 +7,36 @@ import br.com.manage.store.infrastructure.handler.exceptions.ConflictException;
 import br.com.manage.store.infrastructure.handler.exceptions.NotFoundException;
 import br.com.manage.store.infrastructure.repository.ProductRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Component
 @AllArgsConstructor
-public class ProductExists {
+public class ProductExistsUtil {
 
-    private final ProductRepository productRepository;
 
-    public void verifyConflictProduct(String code) {
+    public static void verifyConflictProduct(ProductRepository productRepository, String code) {
         if (code != null && productRepository.existsByCode(code)) {
             throw new ConflictException(code);
         }
     }
 
-    public void verifyExistsIdProduct(Long id) {
+    public static void verifyExistsIdProduct(ProductRepository productRepository, Long id) {
         if (!productRepository.existsById(id)) {
             throw new NotFoundException(id.toString());
         }
     }
 
-    public ProductEntity getProductExists(Long id) {
+    public static ProductEntity getProductExists(ProductRepository productRepository, Long id) {
         return productRepository.findById(id).orElseThrow(() -> new NotFoundException(id.toString()));
     }
 
-    public ProductEntity getProductExistsCode(String code) {
+    public static ProductEntity getProductExistsCode(ProductRepository productRepository, String code) {
         return productRepository.findByCode(code).orElseThrow(() -> new NotFoundException(code));
     }
 
-    public void verifyConflictEntityAndRequestCode(ProductEntity product, ProductRequest request) {
+    public static void verifyConflictEntityAndRequestCode(ProductRepository productRepository, ProductEntity product, ProductRequest request) {
         if (!product.getCode().equals(request.getCode())) {
             if (productRepository.existsByCode(request.getCode())) {
                 throw new ConflictException(request.getCode());
@@ -47,7 +44,7 @@ public class ProductExists {
         }
     }
 
-    public Map<String, ProductEntity> verifyProductAndMap(List<SalesProductRequest> request) {
+    public static Map<String, ProductEntity> verifyProductAndMap(ProductRepository productRepository, List<SalesProductRequest> request) {
         return request.stream().map(ref -> {
             var entity = productRepository.findByCode(ref.getCode()).orElseThrow(() -> new NotFoundException(ref.getCode()));
             if (ref.getAmount() > entity.getQuantityInStock()) {

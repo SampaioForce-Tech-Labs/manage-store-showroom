@@ -6,7 +6,6 @@ import br.com.manage.store.domain.entity.CustomerEntity;
 import br.com.manage.store.domain.entity.ReferencePersonEntity;
 import br.com.manage.store.domain.mapper.GenericMapper;
 import br.com.manage.store.domain.service.ICustomerService;
-import br.com.manage.store.infrastructure.component.CustomerExists;
 import br.com.manage.store.infrastructure.handler.exceptions.PersistenceDataBaseException;
 import br.com.manage.store.infrastructure.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
@@ -15,6 +14,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static br.com.manage.store.infrastructure.util.CustomerExistsUtil.*;
 import static br.com.manage.store.infrastructure.util.VerifyNotNullUtils.notNull;
 
 @Service
@@ -23,14 +23,13 @@ import static br.com.manage.store.infrastructure.util.VerifyNotNullUtils.notNull
 public class CustomerService implements ICustomerService {
 
     private final CustomerRepository customerRepository;
-    private final CustomerExists customerExists;
     private final GenericMapper mapper;
 
     @Transactional
     @Override
     public CustomerResponse create(CustomerRequest request) {
         notNull(request);
-        customerExists.verifyConflictEmailOrCpf(request.getEmail(), request.getCpf());
+        verifyConflictEmailOrCpf(customerRepository, request.getEmail(), request.getCpf());
         var customerEntity = mapper.map(request, CustomerEntity.class);
         var personList = mapper.mapAll(request.getReferenceEntityList(), ReferencePersonEntity.class);
         personList.forEach(ref -> ref.setCustomerEntity(customerEntity));
@@ -41,14 +40,14 @@ public class CustomerService implements ICustomerService {
     @Override
     public CustomerResponse findById(Long id) {
         notNull(id);
-        return mapper.map(customerExists.getEntityExistsIdCustomer(id), CustomerResponse.class);
+        return mapper.map(getEntityExistsIdCustomer(customerRepository, id), CustomerResponse.class);
     }
 
     @Transactional
     @Override
     public void delete(Long id) {
         notNull(id);
-        customerExists.verifyExistsCustomer(id);
+        verifyExistsCustomer(customerRepository, id);
         customerRepository.deleteById(id);
     }
 
@@ -56,8 +55,8 @@ public class CustomerService implements ICustomerService {
     @Override
     public CustomerResponse update(Long id, CustomerRequest request) {
         notNull(id, request);
-        var customer = customerExists.getEntityExistsIdCustomer(id);
-        customerExists.verifyConflictCustomer(customer, request);
+        var customer = getEntityExistsIdCustomer(customerRepository, id);
+        verifyConflictCustomer(customerRepository, customer, request);
         var customerRequest = mapper.map(request, CustomerEntity.class);
         customerRequest.setId(customer.getId());
         customerRequest.getReferenceEntityList().forEach(ref -> ref.setCustomerEntity(customerRequest));

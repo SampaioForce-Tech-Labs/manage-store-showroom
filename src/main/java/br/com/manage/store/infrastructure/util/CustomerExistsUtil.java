@@ -1,4 +1,4 @@
-package br.com.manage.store.infrastructure.component;
+package br.com.manage.store.infrastructure.util;
 
 import br.com.manage.store.application.api.request.CustomerRequest;
 import br.com.manage.store.domain.entity.CustomerEntity;
@@ -6,16 +6,12 @@ import br.com.manage.store.infrastructure.handler.exceptions.ConflictException;
 import br.com.manage.store.infrastructure.handler.exceptions.NotFoundException;
 import br.com.manage.store.infrastructure.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-@Component
 @AllArgsConstructor
-public class CustomerExists {
+public class CustomerExistsUtil {
 
-    private final CustomerRepository customerRepository;
-
-    public void verifyExistsCustomer(Object source) {
+    public static void verifyExistsCustomer(CustomerRepository customerRepository, Object source) {
         if (source instanceof Long && !customerRepository.existsById((Long) source)) {
             throw new NotFoundException(source.toString());
         } else if (source instanceof String && customerRepository.existsByCpf((String) source)) {
@@ -23,7 +19,7 @@ public class CustomerExists {
         }
     }
 
-    public void verifyConflictCustomer(CustomerEntity entity, CustomerRequest request) {
+    public static void verifyConflictCustomer(CustomerRepository customerRepository, CustomerEntity entity, CustomerRequest request) {
         if (StringUtils.hasText(request.getCpf())) {
             if (!entity.getCpf().equals(request.getCpf()) && customerRepository.existsByCpf(request.getCpf())) {
                 throw new ConflictException(request.getCpf());
@@ -36,7 +32,7 @@ public class CustomerExists {
         }
     }
 
-    public void verifyConflictEmailOrCpf(String email, String cpf) {
+    public static void verifyConflictEmailOrCpf(CustomerRepository customerRepository, String email, String cpf) {
         if (email != null && customerRepository.existsByEmail(email)) {
             throw new ConflictException(email);
         }
@@ -45,7 +41,7 @@ public class CustomerExists {
         }
     }
 
-    public CustomerEntity getEntityExistsIdCustomer(Long source) {
+    public static CustomerEntity getEntityExistsIdCustomer(CustomerRepository customerRepository, Long source) {
         return customerRepository.findById(source).orElseThrow(() -> new NotFoundException(source.toString()));
     }
 }

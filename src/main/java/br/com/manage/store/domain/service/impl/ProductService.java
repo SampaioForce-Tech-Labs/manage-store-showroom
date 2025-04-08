@@ -8,9 +8,8 @@ import br.com.manage.store.domain.enums.ISubcategory;
 import br.com.manage.store.domain.enums.category.CategoryEnum;
 import br.com.manage.store.domain.mapper.GenericMapper;
 import br.com.manage.store.domain.service.IProductService;
-import br.com.manage.store.infrastructure.component.ProductExists;
-import br.com.manage.store.infrastructure.handler.exceptions.PersistenceDataBaseException;
 import br.com.manage.store.infrastructure.handler.exceptions.NotFoundException;
+import br.com.manage.store.infrastructure.handler.exceptions.PersistenceDataBaseException;
 import br.com.manage.store.infrastructure.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -27,6 +26,7 @@ import java.util.stream.Collectors;
 import static br.com.manage.store.infrastructure.util.CalcPriceUtil.discount;
 import static br.com.manage.store.infrastructure.util.ComparePriceUtils.checkPrice;
 import static br.com.manage.store.infrastructure.util.EnumCheckerUtils.isValidEnum;
+import static br.com.manage.store.infrastructure.util.ProductExistsUtil.*;
 import static br.com.manage.store.infrastructure.util.VerifyNotNullUtils.notNull;
 
 @Service
@@ -35,13 +35,12 @@ public class ProductService implements IProductService {
 
     private final ProductRepository productRepository;
     private final GenericMapper mapper;
-    private final ProductExists productExists;
 
     @Transactional(rollbackFor = PersistenceDataBaseException.class)
     @Override
     public ProductResponse create(ProductRequest request) {
         notNull(request);
-        productExists.verifyConflictProduct(request.getCode());
+        verifyConflictProduct(productRepository, request.getCode());
         checkPrice(request.getPrice());
         isValidEnum(request);
         var entity = mapper.map(request, ProductEntity.class);
@@ -60,7 +59,7 @@ public class ProductService implements IProductService {
     @Override
     public void delete(Long id) {
         notNull(id);
-        productExists.verifyExistsIdProduct(id);
+        verifyExistsIdProduct(productRepository, id);
         productRepository.deleteById(id);
     }
 
@@ -69,8 +68,8 @@ public class ProductService implements IProductService {
     public ProductResponse update(Long id, ProductRequest request) {
         notNull(id, request);
         isValidEnum(request);
-        var product = productExists.getProductExists(id);
-        productExists.verifyConflictEntityAndRequestCode(product, request);
+        var product = getProductExists(productRepository, id);
+        verifyConflictEntityAndRequestCode(productRepository, product, request);
         BeanUtils.copyProperties(request, product, "id");
         product.setPriceWithDiscount(discount(request.getDiscountPercentage(), request.getPrice()));
         return mapper.map(productRepository.save(product), ProductResponse.class);
