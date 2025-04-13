@@ -4,11 +4,13 @@ import br.com.manage.store.domain.enums.ProfileEnum;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.br.CPF;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,11 +25,11 @@ public class CustomerRequest {
     @Size(message = "{customer.size.name}", max = 60)
     private String name;
 
-    //    @CPF(message = "{customer.cpf.cpf}")
+    @CPF(message = "{customer.cpf.cpf}")
     @Size(message = "{customer.size.cpf}", max = 14)
     private String cpf;
 
-    //    @Email(message = "{customer.email.email}")
+    @Email(message = "{customer.email.email}")
     @Size(message = "{customer.size.email}", max = 60)
     private String email;
 
@@ -36,7 +38,7 @@ public class CustomerRequest {
 
     private Date dateBirth;
 
-//    @Size(message = "{customer.size.profile}", max = 20)
+    //    @Size(message = "{customer.size.profile}", max = 20)
     @Enumerated(EnumType.STRING)
     private ProfileEnum profile;
 

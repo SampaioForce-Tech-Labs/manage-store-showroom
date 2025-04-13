@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 public class SalesRequest {
 
-//    @CPF(message = "{sales.cpf.customerCpf}")
+    @CPF(message = "{sales.cpf.customerCpf}")
     private String customerCpf;
 
     @DecimalMin(value = "0.0", message = "{sales.decimalmin.discountPercentage}")
