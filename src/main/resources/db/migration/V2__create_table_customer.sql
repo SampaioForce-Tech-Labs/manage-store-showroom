@@ -5,6 +5,7 @@ CREATE TABLE tb_customer(
     email VARCHAR(60) UNIQUE,
     phone VARCHAR(19),
     date_birth DATE,
+    profile VARCHAR(20),
     marital_status VARCHAR(20),
     enterprise VARCHAR(50),
     business_phone VARCHAR(19),
@@ -22,7 +23,7 @@ CREATE TABLE tb_customer(
     address VARCHAR(60),
     number VARCHAR(10),
     references_point VARCHAR(60),
-    complement VARCHAR(20),
+    complement VARCHAR(50),
     city VARCHAR(20),
     state VARCHAR(20),
     create_at DATETIME

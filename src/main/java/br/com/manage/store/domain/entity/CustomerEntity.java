@@ -1,5 +1,6 @@
 package br.com.manage.store.domain.entity;
 
+import br.com.manage.store.domain.enums.ProfileEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,6 +40,10 @@ public class CustomerEntity implements Serializable {
 
     @Column(name = "date_birth")
     private Date dateBirth;
+
+    @Column(name = "profile")
+    @Enumerated(EnumType.STRING)
+    private ProfileEnum profile;
 
     @Column(name = "marital_status ")
     private String maritalStatus;

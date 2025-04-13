@@ -21,7 +21,7 @@ public class ProductResponse {
     private double discountPercentage;
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private BigDecimal price;
-    private Integer amount;
+    private Integer quantityInStock;
     private String size;
     private String description;
     private String category;

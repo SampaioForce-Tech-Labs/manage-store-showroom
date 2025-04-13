@@ -88,7 +88,6 @@ class CustomerServiceTest {
         @Test
         @DisplayName(value = "Should create a customer with success.")
         void ShouldCreateACustomerWithSuccess() {
-
             // Arrange
             customerResponse = new CustomerResponse();
             customerResponse.setId(1L);

@@ -2,6 +2,7 @@ server:
   servlet:
     context-path: /manage_store/v1
   port: 8080
+  connection-timeout: 5s
 
 spring:
   application:

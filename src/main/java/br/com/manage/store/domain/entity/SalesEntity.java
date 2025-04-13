@@ -26,6 +26,7 @@ public class SalesEntity {
     private CustomerEntity customerEntity;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "status")
     private StatusEnum status;
 
     @Column(name = "discount_percentage")

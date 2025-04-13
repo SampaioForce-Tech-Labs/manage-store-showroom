@@ -19,7 +19,7 @@ public class AddressRequest {
     @Size(message = "{address.size.number}", max = 10)
     private String number;
 
-    @Size(message = "{address.size.complement}", max = 20)
+    @Size(message = "{address.size.complement}", max = 50)
     private String complement;
 
     @Size(message = "{address.size.referencePoint}", max = 60)

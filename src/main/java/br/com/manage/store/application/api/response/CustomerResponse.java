@@ -1,5 +1,6 @@
 package br.com.manage.store.application.api.response;
 
+import br.com.manage.store.domain.enums.ProfileEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ public class CustomerResponse {
     private String email;
     private String phone;
     private Date dateBirth;
+    private ProfileEnum profile;
     private AddressResponse addressData;
     private String maritalStatus;
     private String enterprise;

@@ -8,19 +8,15 @@ import br.com.manage.store.domain.entity.SalesProductEntity;
 import br.com.manage.store.domain.enums.StatusEnum;
 import br.com.manage.store.domain.mapper.GenericMapper;
 import br.com.manage.store.domain.service.ISalesService;
-import br.com.manage.store.infrastructure.handler.exceptions.NotFoundException;
 import br.com.manage.store.infrastructure.handler.exceptions.PersistenceDataBaseException;
 import br.com.manage.store.infrastructure.repository.CustomerRepository;
 import br.com.manage.store.infrastructure.repository.ProductRepository;
 import br.com.manage.store.infrastructure.repository.SalesRepository;
-import br.com.manage.store.infrastructure.util.ConvertReplaceAllUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.stream.Collectors;
 
 import static br.com.manage.store.infrastructure.util.DecrementSalesProductUtils.decrementProduct;
 import static br.com.manage.store.infrastructure.util.VerifyNotNullUtils.notNull;
@@ -54,7 +50,7 @@ public class SalesService implements ISalesService {
     public SalesResponse findById(Long id) {
         notNull(id);
         var dados = salesRepository.findById(id).get();
-        var salesResponse =  mapper.map(dados, SalesResponse.class);
+        var salesResponse = mapper.map(dados, SalesResponse.class);
         salesResponse.setProducts(mapper.mapAll(dados.getProductEntities(), SalesProductResponse.class));
         return salesResponse;
     }
@@ -64,6 +60,7 @@ public class SalesService implements ISalesService {
         notNull(id);
         salesRepository.deleteById(id);
     }
+
 
     @Transactional(rollbackFor = PersistenceDataBaseException.class)
     @Override
@@ -83,10 +80,10 @@ public class SalesService implements ISalesService {
     public Page<SalesResponse> findAll(Specification<SalesEntity> specification, int size, int page) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
         Page<SalesEntity> sales = salesRepository.findAll(specification, pageable);
-        var salesResponse = sales.stream().map(response ->{
-            var salesResponses = mapper.map(response,SalesResponse.class);
-            salesResponses.setProducts(mapper.mapAll(response.getProductEntities(),SalesProductResponse.class));
-           return salesResponses;
+        var salesResponse = sales.stream().map(response -> {
+            var salesResponses = mapper.map(response, SalesResponse.class);
+            salesResponses.setProducts(mapper.mapAll(response.getProductEntities(), SalesProductResponse.class));
+            return salesResponses;
         }).toList();
         return new PageImpl<>(salesResponse, pageable, sales.getTotalElements());
     }

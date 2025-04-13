@@ -1,5 +1,8 @@
 package br.com.manage.store.application.api.request;
 
+import br.com.manage.store.domain.enums.ProfileEnum;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -32,6 +35,10 @@ public class CustomerRequest {
     private String phone;
 
     private Date dateBirth;
+
+//    @Size(message = "{customer.size.profile}", max = 20)
+    @Enumerated(EnumType.STRING)
+    private ProfileEnum profile;
 
     @Valid
     private AddressRequest addressData;
