@@ -11,21 +11,21 @@ spring:
     ansi:
       enabled: always
   datasource:
-    url: ${MYSQL_URL}
-    username: ${MYSQL_USER}
-    password: ${MYSQL_PASSWORD}
+    url: ${MYSQLURL}
+    username: ${MYSQLUSER}
+    password: ${MYSQLPASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     show-sql: false
 
   flyway:
     enabled: true
-    url: ${MYSQL_URL}
-    user: ${MYSQL_USER}
-    password: ${MYSQL_PASSWORD}
+    url: ${MYSQLURL}
+    user: ${MYSQLUSER}
+    password: ${MYSQLPASSWORD}
     locations: classpath:db/migration
 cors:
-  allowedorigins: ${CORS_ALLONEORIGINS}
+  allowedorigins: ${CORSALLONEORIGINS}
 
 # Habilita todos os endpoints do Actuator
 management:
