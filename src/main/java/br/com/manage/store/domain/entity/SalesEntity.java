@@ -21,10 +21,6 @@ public class SalesEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sales_customer_id", referencedColumnName = "id")
-    private CustomerEntity customerEntity;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private StatusEnum status;
@@ -32,21 +28,31 @@ public class SalesEntity {
     @Column(name = "discount_percentage")
     private BigDecimal discountPercentage;
 
-    @OneToMany(mappedBy = "salesEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<SalesProductEntity> productEntities = new ArrayList<>();
-
     @Column(name = "total_items")
     private int totalItems;
 
-    @Column(name = "price_with_discount")
-    private BigDecimal priceWithDiscount;
+    @Column(name = "subtotal")
+    private BigDecimal subtotal;
 
     @Column(name = "total_price")
     private BigDecimal totalPrice;
+
+    @Column(name = "payment_method")
+    private String paymentMethod;
+
+    @Column(name = "number_installments")
+    private int numberInstallments;
 
     @CreationTimestamp
     @Column(name = "create_at", updatable = false)
     @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss")
     private LocalDateTime createAt = LocalDateTime.now();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sales_customer_id", referencedColumnName = "id")
+    private CustomerEntity customerEntity;
+
+    @OneToMany(mappedBy = "salesEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<SalesProductEntity> productEntities = new ArrayList<>();
 
 }

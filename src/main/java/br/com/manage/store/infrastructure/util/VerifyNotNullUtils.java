@@ -9,7 +9,6 @@ import org.springframework.util.ObjectUtils;
 public class VerifyNotNullUtils {
 
     public static void notNull(Object... sources) {
-
         try {
             for (Object data : sources) {
                 if (ObjectUtils.isEmpty(data)) {
@@ -20,4 +19,5 @@ public class VerifyNotNullUtils {
             throw new InvalidArgumentException();
         }
     }
+
 }

@@ -19,10 +19,12 @@ public class SalesResponse {
     private String customerCpf;
     private StatusEnum status;
     private BigDecimal discountPercentage;
-    private List<SalesProductResponse> products = new ArrayList<>();
     private int totalItems;
-    private  BigDecimal priceWithDiscount;
     private BigDecimal totalPrice;
+    private  BigDecimal subtotal;
+    private String paymentMethod;
+    private int numberInstallments;
     @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss")
     private LocalDateTime createAt;
+    private List<SalesProductResponse> products = new ArrayList<>();
 }

@@ -42,7 +42,8 @@ management:
 #    root: error
 logging:
   level:
-    br:
-      com:
-        manage:
-          store=ERROR:
+    br.com.manage.store: ERROR
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+
+

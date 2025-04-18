@@ -30,12 +30,19 @@ public class SalesRequest {
     @NotNull(message = "{sales.notnull.totalItems}")
     private int totalItems;
 
-    @DecimalMin(value = "0.0", message = "{sales.decimalmin.priceWithDiscount}")
-    private BigDecimal priceWithDiscount;
-
     @DecimalMin(value = "0.0", message = "{sales.decimalmin.totalPrice}")
-//    @NotNull(message = "{sales.notnull.totalPrice}")
+    @NotNull(message = "{sales.notnull.totalPrice}")
     private BigDecimal totalPrice;
+
+    @DecimalMin(value = "0.0", message = "{sales.decimalmin.subtotal}")
+    @NotNull(message = "{sales.notnull.subtotal}")
+    private BigDecimal subtotal;
+
+    @NotBlank(message = "{sales.notblank.paymentMethod}")
+    private String paymentMethod;
+
+    @DecimalMin(value = "0", message = "{sales.decimalmin.numberInstallments}")
+    private int numberInstallments;;
 
     private List<SalesProductRequest> products = new ArrayList<>();
 }

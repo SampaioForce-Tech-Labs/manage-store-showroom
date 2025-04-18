@@ -12,6 +12,7 @@ import br.com.manage.store.infrastructure.handler.exceptions.PersistenceDataBase
 import br.com.manage.store.infrastructure.repository.CustomerRepository;
 import br.com.manage.store.infrastructure.repository.ProductRepository;
 import br.com.manage.store.infrastructure.repository.SalesRepository;
+import br.com.manage.store.infrastructure.util.VerifyNotNullUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
@@ -33,6 +34,7 @@ public class SalesService implements ISalesService {
     @Transactional(rollbackFor = PersistenceDataBaseException.class)
     @Override
     public SalesResponse create(SalesRequest request) {
+        notNull(request.getProducts());
         decrementProduct(productRepository, request);
         var sales = mapper.map(request, SalesEntity.class);
         sales.setCustomerEntity(customerRepository.findByCpf(request.getCustomerCpf()).get());
@@ -42,7 +44,9 @@ public class SalesService implements ISalesService {
         sales.getProductEntities().forEach(product -> product.setSalesEntity(sales));
         sales.setProductEntities(salesProductEntitys);
         var salesEntity = salesRepository.save(sales);
-        return mapper.map(salesEntity, SalesResponse.class);
+        var salesResponse = mapper.map(salesEntity, SalesResponse.class);
+        salesResponse.setProducts(mapper.mapAll(salesEntity.getProductEntities(), SalesProductResponse.class));
+        return salesResponse;
     }
 
 
