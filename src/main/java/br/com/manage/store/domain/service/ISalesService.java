@@ -14,8 +14,6 @@ public interface ISalesService {
 
     void delete(Long id);
 
-    SalesResponse update(Long id, SalesRequest request);
-
     Page<SalesResponse> findAll(Specification<SalesEntity> specification, int size, int page);
 
 }

@@ -14,8 +14,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static br.com.manage.store.infrastructure.util.AssertUtils.notEmpty;
 import static br.com.manage.store.infrastructure.util.CustomerExistsUtil.*;
-import static br.com.manage.store.infrastructure.util.VerifyNotNullUtils.notNull;
 
 @Service
 @AllArgsConstructor
@@ -27,7 +27,7 @@ public class CustomerService implements ICustomerService {
     @Transactional(rollbackFor = PersistenceDataBaseException.class)
     @Override
     public CustomerResponse create(CustomerRequest request) {
-        notNull(request);
+        notEmpty(request);
         verifyConflictEmailOrCpf(customerRepository, request.getEmail(), request.getCpf());
         var customerEntity = mapper.map(request, CustomerEntity.class);
         var personList = mapper.mapAll(request.getReferenceEntityList(), ReferencePersonEntity.class);
@@ -38,13 +38,13 @@ public class CustomerService implements ICustomerService {
 
     @Override
     public CustomerResponse findById(Long id) {
-        notNull(id);
+        notEmpty(id);
         return mapper.map(getEntityExistsIdCustomer(customerRepository, id), CustomerResponse.class);
     }
     
     @Override
     public void delete(Long id) {
-        notNull(id);
+        notEmpty(id);
         verifyExistsCustomer(customerRepository, id);
         customerRepository.deleteById(id);
     }
@@ -52,7 +52,7 @@ public class CustomerService implements ICustomerService {
     @Transactional(rollbackFor = PersistenceDataBaseException.class)
     @Override
     public CustomerResponse update(Long id, CustomerRequest request) {
-        notNull(id, request);
+        notEmpty(id, request);
         var customer = getEntityExistsIdCustomer(customerRepository, id);
         verifyConflictCustomer(customerRepository, customer, request);
         var customerRequest = mapper.map(request, CustomerEntity.class);

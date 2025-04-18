@@ -23,11 +23,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static br.com.manage.store.infrastructure.util.AssertUtils.notEmpty;
 import static br.com.manage.store.infrastructure.util.CalcPriceUtil.discount;
 import static br.com.manage.store.infrastructure.util.ComparePriceUtils.checkPrice;
 import static br.com.manage.store.infrastructure.util.EnumCheckerUtils.isValidEnum;
 import static br.com.manage.store.infrastructure.util.ProductExistsUtil.*;
-import static br.com.manage.store.infrastructure.util.VerifyNotNullUtils.notNull;
 
 @Service
 @AllArgsConstructor
@@ -39,7 +39,7 @@ public class ProductService implements IProductService {
     @Transactional(rollbackFor = PersistenceDataBaseException.class)
     @Override
     public ProductResponse create(ProductRequest request) {
-        notNull(request);
+        notEmpty(request);
         verifyConflictProduct(productRepository, request.getCode());
         checkPrice(request.getPrice());
         isValidEnum(request);
@@ -50,7 +50,7 @@ public class ProductService implements IProductService {
 
     @Override
     public ProductResponse findById(Long id) {
-        notNull(id);
+        notEmpty(id);
         var entity = productRepository.findById(id).orElseThrow(() -> new NotFoundException("ID: " + id));
         return mapper.map(entity, ProductResponse.class);
     }
@@ -58,7 +58,7 @@ public class ProductService implements IProductService {
     @Transactional
     @Override
     public void delete(Long id) {
-        notNull(id);
+        notEmpty(id);
         verifyExistsIdProduct(productRepository, id);
         productRepository.deleteById(id);
     }
@@ -66,7 +66,7 @@ public class ProductService implements IProductService {
     @Transactional(rollbackFor = PersistenceDataBaseException.class)
     @Override
     public ProductResponse update(Long id, ProductRequest request) {
-        notNull(id, request);
+        notEmpty(id, request);
         isValidEnum(request);
         var product = getProductExists(productRepository, id);
         verifyConflictEntityAndRequestCode(productRepository, product, request);

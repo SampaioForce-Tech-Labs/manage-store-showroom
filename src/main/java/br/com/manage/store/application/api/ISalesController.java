@@ -21,9 +21,6 @@ public interface ISalesController {
     @DeleteMapping(value = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Void> delete(@PathVariable Long id);
 
-    @PutMapping(value = "/update/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<SalesResponse> update(@PathVariable Long id, @RequestBody SalesRequest request);
-
     @GetMapping(value = "/find-all", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Page<SalesResponse>> findAll(
             SalesFilterTO filterTO,

@@ -1,13 +1,9 @@
 package br.com.manage.store.application.controller;
 
 import br.com.manage.store.application.api.ISalesController;
-import br.com.manage.store.application.api.filter.ProductFilterTO;
 import br.com.manage.store.application.api.filter.SalesFilterTO;
-import br.com.manage.store.application.api.request.SalesCalcRequest;
 import br.com.manage.store.application.api.request.SalesRequest;
-import br.com.manage.store.application.api.response.SalesCalcResponse;
 import br.com.manage.store.application.api.response.SalesResponse;
-import br.com.manage.store.domain.entity.ProductEntity;
 import br.com.manage.store.domain.entity.SalesEntity;
 import br.com.manage.store.domain.service.ISalesService;
 import br.com.manage.store.infrastructure.component.specification.SpecificationFactory;
@@ -39,11 +35,6 @@ public class SalesController implements ISalesController {
     public ResponseEntity<Void> delete(Long id) {
         iSalesService.delete(id);
         return ResponseEntity.noContent().build();
-    }
-
-    @Override
-    public ResponseEntity<SalesResponse> update(Long id, SalesRequest request) {
-        return ResponseEntity.status(HttpStatus.OK).body(iSalesService.update(id, request));
     }
 
     @Override

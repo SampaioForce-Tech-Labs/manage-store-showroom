@@ -12,15 +12,14 @@ import br.com.manage.store.infrastructure.handler.exceptions.PersistenceDataBase
 import br.com.manage.store.infrastructure.repository.CustomerRepository;
 import br.com.manage.store.infrastructure.repository.ProductRepository;
 import br.com.manage.store.infrastructure.repository.SalesRepository;
-import br.com.manage.store.infrastructure.util.VerifyNotNullUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static br.com.manage.store.infrastructure.util.AssertUtils.notEmpty;
 import static br.com.manage.store.infrastructure.util.DecrementSalesProductUtils.decrementProduct;
-import static br.com.manage.store.infrastructure.util.VerifyNotNullUtils.notNull;
 
 @Service
 @AllArgsConstructor
@@ -34,7 +33,7 @@ public class SalesService implements ISalesService {
     @Transactional(rollbackFor = PersistenceDataBaseException.class)
     @Override
     public SalesResponse create(SalesRequest request) {
-        notNull(request.getProducts());
+        notEmpty(request.getProducts());
         decrementProduct(productRepository, request);
         var sales = mapper.map(request, SalesEntity.class);
         sales.setCustomerEntity(customerRepository.findByCpf(request.getCustomerCpf()).get());
@@ -52,7 +51,7 @@ public class SalesService implements ISalesService {
 
     @Override
     public SalesResponse findById(Long id) {
-        notNull(id);
+        notEmpty(id);
         var dados = salesRepository.findById(id).get();
         var salesResponse = mapper.map(dados, SalesResponse.class);
         salesResponse.setProducts(mapper.mapAll(dados.getProductEntities(), SalesProductResponse.class));
@@ -61,23 +60,8 @@ public class SalesService implements ISalesService {
 
     @Override
     public void delete(Long id) {
-        notNull(id);
+        notEmpty(id);
         salesRepository.deleteById(id);
-    }
-
-
-    @Transactional(rollbackFor = PersistenceDataBaseException.class)
-    @Override
-    public SalesResponse update(Long id, SalesRequest request) {
-//        notNull(id, request);
-//        var salesEntity = salesRepository.findById(id).orElseThrow(() -> new NotFoundException("não encontrado."));
-//        var sales = mapper.map(request, SalesEntity.class);
-//        sales.setProductEntities(mapper.mapAll(request.getProducts(),SalesProductEntity.class));
-//        sales.setId(salesEntity.getId());
-//        salesRepository.save(sales);
-//
-//        return mapper.map(request, SalesResponse.class);
-        return null;
     }
 
     @Override

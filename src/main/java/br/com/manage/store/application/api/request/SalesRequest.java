@@ -23,7 +23,6 @@ public class SalesRequest {
 
     @DecimalMin(value = "0.0", message = "{sales.decimalmin.discountPercentage}")
     @DecimalMax(value = "100.0", message = "{sales.decimalmax.discountPercentage}")
-//    @NotBlank(message = "{sales.notblank.discountPercentage}")
     private BigDecimal discountPercentage;
 
     @DecimalMin(value = "0", message = "{sales.decimalmin.totalItems}")

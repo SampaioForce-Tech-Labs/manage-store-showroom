@@ -5,10 +5,11 @@ import br.com.manage.store.domain.entity.CustomerEntity;
 import br.com.manage.store.infrastructure.handler.exceptions.ConflictException;
 import br.com.manage.store.infrastructure.handler.exceptions.NotFoundException;
 import br.com.manage.store.infrastructure.repository.CustomerRepository;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CustomerExistsUtil {
 
     public static void verifyExistsCustomer(CustomerRepository customerRepository, Object source) {
