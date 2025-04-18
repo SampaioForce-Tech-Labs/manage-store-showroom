@@ -7,6 +7,7 @@ import br.com.manage.store.application.api.response.CustomerResponse;
 import br.com.manage.store.domain.entity.AddressData;
 import br.com.manage.store.domain.entity.CustomerEntity;
 import br.com.manage.store.domain.entity.ReferencePersonEntity;
+import br.com.manage.store.domain.enums.ProfileEnum;
 import br.com.manage.store.domain.mapper.GenericMapper;
 import br.com.manage.store.infrastructure.repository.CustomerRepository;
 import org.junit.jupiter.api.*;
@@ -21,6 +22,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
@@ -55,7 +57,7 @@ class CustomerServiceTest {
     void setUp() {
         Date dateBirth = java.sql.Date.valueOf(LocalDate.of(1995, 8, 15));
 
-        customerRequest = new CustomerRequest("João da Silva", "123.456.789-00", "joao.silva@example.com", "MG-12.345.678", dateBirth, new AddressRequest(), "Masculino", "Solteiro", "Brasileiro", "Engenheiro de Software", "Empresa XYZ", "31999998888", "31988887777", "joaosilva", "senha123", "joaosilva123", "123456789", "1234", "Visa", List.of(new ReferencePersonRequest()));
+        customerRequest = new CustomerRequest("João da Silva", "123.456.789-00", "joao.silva@example.com", "MG-12.345.678", dateBirth, ProfileEnum.BOM, new AddressRequest(), "Masculino", "Solteiro", "Brasileiro", "Engenheiro de Software", "Empresa XYZ", "31999998888", "31988887777", "joaosilva", "senha123", "joaosilva123", "123456789", "1234", "Visa", List.of(new ReferencePersonRequest()));
 
         customerEntity = new CustomerEntity(1L, // id
                 "João da Silva", // name
@@ -63,7 +65,7 @@ class CustomerServiceTest {
                 "joao.silva@example.com", // email
                 "31999998888", // phone
                 java.sql.Date.valueOf(LocalDate.of(1995, 8, 15)), // dateBirth
-                "Solteiro", // maritalStatus
+                ProfileEnum.BOM, "Solteiro", // maritalStatus
                 "Empresa XYZ", // enterprise
                 "31988887777", // businessPhone
                 "2 anos", // lengthService
@@ -99,7 +101,31 @@ class CustomerServiceTest {
             CustomerEntity capturedEntity = entityArgumentCaptor.getValue();
             //Assert
             verify(customerRepository, times(1)).save(any());
-            Assertions.assertEquals(capturedEntity.getId(), response.getId());
+            Assertions.assertEquals(response.getId(), capturedEntity.getId());
+
+            Assertions.assertEquals(String.class, capturedEntity.getName().getClass());
+            Assertions.assertEquals(String.class, capturedEntity.getCpf().getClass());
+            Assertions.assertEquals(String.class, capturedEntity.getEmail().getClass());
+            Assertions.assertEquals(String.class, capturedEntity.getPhone().getClass());
+            Assertions.assertEquals(java.sql.Date.class, capturedEntity.getDateBirth().getClass());
+            Assertions.assertEquals(ProfileEnum.class, capturedEntity.getProfile().getClass());
+            Assertions.assertEquals(String.class, capturedEntity.getMaritalStatus().getClass());
+            Assertions.assertEquals(String.class, capturedEntity.getEnterprise().getClass());
+            Assertions.assertEquals(String.class, capturedEntity.getBusinessPhone().getClass());
+            Assertions.assertEquals(String.class, capturedEntity.getLengthService().getClass());
+            Assertions.assertEquals(String.class, capturedEntity.getBusinessZipCode().getClass());
+            Assertions.assertEquals(String.class, capturedEntity.getBusinessAddress().getClass());
+            Assertions.assertEquals(String.class, capturedEntity.getBusinessCity().getClass());
+            Assertions.assertEquals(String.class, capturedEntity.getBusinessState().getClass());
+            Assertions.assertEquals(String.class, capturedEntity.getBusinessPosition().getClass());
+            Assertions.assertEquals(String.class, capturedEntity.getBank().getClass());
+            Assertions.assertEquals(String.class, capturedEntity.getAgency().getClass());
+            Assertions.assertEquals(String.class, capturedEntity.getFather().getClass());
+            Assertions.assertEquals(String.class, capturedEntity.getMother().getClass());
+            Assertions.assertEquals(AddressData.class, capturedEntity.getAddressData().getClass());
+            Assertions.assertEquals(ArrayList.class, capturedEntity.getSalesEntities().getClass());
+            Assertions.assertEquals(LinkedList.class, capturedEntity.getReferenceEntityList().getClass());
+
         }
     }
 }
