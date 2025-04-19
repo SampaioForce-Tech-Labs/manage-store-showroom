@@ -35,11 +35,11 @@ management:
         include: "*"
     shutdown:
       enabled: false
-#logging:
-#  file:
-#    name: logs/application.log
-#  level:
-#    root: error
+  metrics:
+    enable:
+      processor: false
+      jvm: false
+
 logging:
   level:
     br.com.manage.store: ERROR
