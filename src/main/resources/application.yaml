@@ -27,23 +27,6 @@ spring:
 cors:
   allowedorigins: ${CORSALLONEORIGINS}
 
-# Habilita todos os endpoints do Actuator
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-    shutdown:
-      enabled: false
-  metrics:
-    enable:
-      all: false
-    binders:
-      processor:
-        enabled: false
-      jvm:
-        enabled: false
-
 
 logging:
   level:
