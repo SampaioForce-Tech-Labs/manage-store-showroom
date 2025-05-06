@@ -37,8 +37,13 @@ management:
       enabled: false
   metrics:
     enable:
-      processor: false
-      jvm: false
+      all: false
+    binders:
+      processor:
+        enabled: false
+      jvm:
+        enabled: false
+
 
 logging:
   level:
