@@ -27,6 +27,12 @@ spring:
 cors:
   allowedorigins: ${CORSALLONEORIGINS}
 
+management:
+  metrics:
+    binders:
+      processor:
+        enabled: false
+
 
 logging:
   level:
