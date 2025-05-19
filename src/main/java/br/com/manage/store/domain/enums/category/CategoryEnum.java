@@ -9,8 +9,10 @@ import lombok.Getter;
 public enum CategoryEnum {
     ROUPAS("Roupas", RoupasEnum.values()),
     ACESSORIOS("Acessórios", AcessoriosEnum.values()),
-    PERFUMARIA("Perfumaria", PerfumariaEnum.values());
-
+    PRAIA("Praia" , PraiaEnum.values()),
+    ENXOVAL("Enxoval", EnxovalEnum.values()),
+    LINGERIE("Lingerie", LingerieEnum.values()),
+    SAPATOS("Sapatos", SapatosEnum.values());
     private String category;
     private ISubcategory[] subcategory;
 }

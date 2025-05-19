@@ -6,8 +6,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum RoupasEnum implements ISubcategory {
-    MASCULINO("Masculino"),
+public enum LingerieEnum implements ISubcategory {
     FEMININO("Feminino"),
     JUVENIL("Juvenil"),
     INFANTIL("Infantil");
