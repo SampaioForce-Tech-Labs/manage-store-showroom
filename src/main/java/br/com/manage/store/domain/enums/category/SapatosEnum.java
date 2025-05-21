@@ -10,6 +10,8 @@ public enum SapatosEnum implements ISubcategory {
     MASCULINO("Masculino"),
     FEMININO("Feminino"),
     JUVENIL("Juvenil"),
-    INFANTIL("Infantil");
+    INFANTIL("Infantil"),
+    SALTO("Salto"),
+    SANDALHA("Sandalha");
     private final String subcategory;
 }
