@@ -1,0 +1,70 @@
+package br.com.manage.store.domain.service.impl;
+
+import br.com.manage.store.application.api.request.CustomerRequest;
+import br.com.manage.store.application.api.response.CustomerResponse;
+import br.com.manage.store.domain.entity.CustomerEntity;
+import br.com.manage.store.domain.entity.ReferencePersonEntity;
+import br.com.manage.store.domain.mapper.GenericMapper;
+import br.com.manage.store.domain.service.ICustomerService;
+import br.com.manage.store.infrastructure.handler.exceptions.PersistenceDataBaseException;
+import br.com.manage.store.infrastructure.repository.CustomerRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import static br.com.manage.store.infrastructure.util.AssertUtils.notEmpty;
+import static br.com.manage.store.infrastructure.util.CustomerExistsUtil.*;
+
+@Service
+@AllArgsConstructor
+public class CustomerService implements ICustomerService {
+
+    private final CustomerRepository customerRepository;
+    private final GenericMapper mapper;
+
+    @Transactional(rollbackFor = PersistenceDataBaseException.class)
+    @Override
+    public CustomerResponse create(CustomerRequest request) {
+        notEmpty(request);
+        verifyConflictEmailOrCpf(customerRepository, request.getEmail(), request.getCpf());
+        var customerEntity = mapper.map(request, CustomerEntity.class);
+        var personList = mapper.mapAll(request.getReferenceEntityList(), ReferencePersonEntity.class);
+        personList.forEach(ref -> ref.setCustomerEntity(customerEntity));
+        customerEntity.setReferenceEntityList(personList);
+        return mapper.map(customerRepository.save(customerEntity), CustomerResponse.class);
+    }
+
+    @Override
+    public CustomerResponse findById(Long id) {
+        notEmpty(id);
+        return mapper.map(getEntityExistsIdCustomer(customerRepository, id), CustomerResponse.class);
+    }
+    
+    @Override
+    public void delete(Long id) {
+        notEmpty(id);
+        verifyExistsCustomer(customerRepository, id);
+        customerRepository.deleteById(id);
+    }
+
+    @Transactional(rollbackFor = PersistenceDataBaseException.class)
+    @Override
+    public CustomerResponse update(Long id, CustomerRequest request) {
+        notEmpty(id, request);
+        var customer = getEntityExistsIdCustomer(customerRepository, id);
+        verifyConflictCustomer(customerRepository, customer, request);
+        var customerRequest = mapper.map(request, CustomerEntity.class);
+        customerRequest.setId(customer.getId());
+        customerRequest.getReferenceEntityList().forEach(ref -> ref.setCustomerEntity(customerRequest));
+        return mapper.map(customerRepository.save(customerRequest), CustomerResponse.class);
+    }
+
+    @Override
+    public Page<CustomerResponse> findAll(Specification<CustomerEntity> specification, int size, int page) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+        Page<CustomerEntity> custormers = customerRepository.findAll(specification, pageable);
+        return new PageImpl<>(mapper.mapAll(custormers.stream().toList(), CustomerResponse.class), pageable, custormers.getTotalElements());
+    }
+}

@@ -22,20 +22,26 @@ public class ProductEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "code")
+    private String code;
+
     @Column(name = "name")
     private String name;
+
+    @Column(name = "price_with_discount")
+    private BigDecimal priceWithDiscount;
+
+    @Column(name = "discount_percentage")
+    private double discountPercentage;
 
     @Column(name = "price")
     private BigDecimal price;
 
-    @Column(name = "amount")
-    private int amount;
+    @Column(name = "quantity_in_stock")
+    private int quantityInStock;
 
     @Column(name = "size_item")
     private String size;
-
-    @Column(name = "stock")
-    private int stock;
 
     @Column(name = "description")
     private String description;
@@ -43,10 +49,12 @@ public class ProductEntity {
     @Column(name = "category")
     private String category;
 
+    @Column(name = "subcategory")
+    private String subCategory;
+
     @CreationTimestamp
     @Column(name = "create_at", updatable = false)
     private LocalDateTime createAt;
-
 }
 
 

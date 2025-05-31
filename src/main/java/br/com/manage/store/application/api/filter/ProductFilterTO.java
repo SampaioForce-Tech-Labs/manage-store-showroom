@@ -10,6 +10,8 @@ import lombok.Data;
 @Data
 @SpecificationEntity(value = ProductEntity.class)
 public class ProductFilterTO {
+    @SpecificationField(property = "code", operation = SpecificationOperation.LIKE_IGNORE_CASE)
+    private String code;
     @SpecificationField(property = "name", operation = SpecificationOperation.LIKE_IGNORE_CASE)
     private String name;
     @SpecificationField(property = "description", operation = SpecificationOperation.LIKE_IGNORE_CASE)

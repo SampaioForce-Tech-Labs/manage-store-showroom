@@ -14,13 +14,16 @@ import java.time.LocalDateTime;
 public class ProductResponse {
 
     private Long id;
+    private String code;
     private String name;
+    private BigDecimal priceWithDiscount;
+    private double discountPercentage;
     private BigDecimal price;
-    private Integer amount;
+    private Integer quantityInStock;
     private String size;
-    private Integer stock;
     private String description;
     private String category;
+    private String subCategory;
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDateTime createAt;
 }

@@ -6,10 +6,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.util.ObjectUtils;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class VerifyNotNull {
+public class AssertUtils {
 
-    public static void notNull(Object... sources) {
-
+    public static void notEmpty(Object... sources) {
         try {
             for (Object data : sources) {
                 if (ObjectUtils.isEmpty(data)) {
@@ -20,4 +19,5 @@ public class VerifyNotNull {
             throw new InvalidArgumentException();
         }
     }
+
 }
