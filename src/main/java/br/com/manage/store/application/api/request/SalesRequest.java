@@ -41,7 +41,10 @@ public class SalesRequest {
     private String paymentMethod;
 
     @DecimalMin(value = "0", message = "{sales.decimalmin.numberInstallments}")
-    private int numberInstallments;;
+    private int numberInstallments;
+
+    private String rateName;
+    private BigDecimal rateAmount;
 
     private List<SalesProductRequest> products = new ArrayList<>();
 }
