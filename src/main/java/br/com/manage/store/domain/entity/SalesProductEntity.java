@@ -25,10 +25,10 @@ public class SalesProductEntity {
     private String name;
 
     @Column(name = "price_unit")
-    private BigDecimal priceUnit;
+    private BigDecimal unitPrice;
 
     @Column(name = "price_total")
-    private BigDecimal priceTotal;
+    private BigDecimal totalPrice;
 
     @Column(name = "amount")
     private int amount;

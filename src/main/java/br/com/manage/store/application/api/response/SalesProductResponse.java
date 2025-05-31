@@ -14,7 +14,7 @@ public class SalesProductResponse {
     private Long id;
     private String code;
     private String name;
-    private BigDecimal priceUnit;
-    private BigDecimal priceTotal;
+    private BigDecimal unitPrice;
+    private BigDecimal totalPrice;
     private int amount;
 }
