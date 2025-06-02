@@ -11,6 +11,7 @@ import org.hibernate.validator.constraints.br.CPF;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -45,6 +46,9 @@ public class SalesRequest {
 
     private String rateName;
     private BigDecimal rateAmount;
+
+    private Date endDate;
+    private Date startDate;
 
     private List<SalesProductRequest> products = new ArrayList<>();
 }

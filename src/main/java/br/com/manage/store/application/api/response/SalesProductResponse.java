@@ -17,4 +17,5 @@ public class SalesProductResponse {
     private BigDecimal unitPrice;
     private BigDecimal totalPrice;
     private int amount;
+    private BigDecimal priceWithDiscount;
 }

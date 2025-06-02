@@ -12,6 +12,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity(name = "tb_sales")
@@ -50,6 +51,18 @@ public class SalesEntity {
     @Column(name = "create_at", updatable = false)
     @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss")
     private LocalDateTime createAt = LocalDateTime.now();
+
+    @Column(name = "rate_name")
+    private String rateName;
+
+    @Column(name = "rate_amount")
+    private BigDecimal rateAmount;
+
+    @Column(name = "end_date")
+    private Date endDate;
+
+    @Column(name = "start_date")
+    private Date startDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sales_customer_id", referencedColumnName = "id")

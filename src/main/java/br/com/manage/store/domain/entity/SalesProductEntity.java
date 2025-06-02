@@ -33,6 +33,9 @@ public class SalesProductEntity {
     @Column(name = "amount")
     private int amount;
 
+    @Column(name = "price_with_discount")
+    private BigDecimal priceWithDiscount;
+
     @ManyToOne
     @JoinColumn(name = "sales_product_sales_id", referencedColumnName = "id", nullable = false)
     private SalesEntity salesEntity;

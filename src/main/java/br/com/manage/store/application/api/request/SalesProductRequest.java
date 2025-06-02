@@ -31,6 +31,7 @@ public class SalesProductRequest {
     @NotNull(message = "{sales-product.notnull.totalPrice}")
     private BigDecimal totalPrice;
 
+    @DecimalMin(value = "0.0", message = "Valor não pode ser negativo")
     private BigDecimal priceWithDiscount;
 
     @DecimalMin(value = "0", message = "{sales-product.decimalmin.quantityInStock}")
