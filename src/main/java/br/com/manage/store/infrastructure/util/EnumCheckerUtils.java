@@ -15,13 +15,6 @@ import static br.com.manage.store.infrastructure.util.ConvertReplaceAllUtils.rep
 public class EnumCheckerUtils {
 
     public static void isValidEnum(ProductRequest request) {
-        try {
-            var category = CategoryEnum.valueOf(replaceAll(request.getCategory()));
-            if (Arrays.stream(category.getSubcategory()).filter(f -> f.getSubcategory().equals(request.getSubCategory())).collect(Collectors.toList()).isEmpty()) {
-                throw new IllegalEnumException("SUBCATEGORIA: " + request.getSubCategory());
-            }
-        } catch (IllegalArgumentException ex) {
-            throw new IllegalEnumException("CATEGORIA: " + request.getCategory());
-        }
+
     }
 }
